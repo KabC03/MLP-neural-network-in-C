@@ -28,6 +28,7 @@ bool scale_M(const matrix *m1, matrix *m2, const int scalar);
 bool diagonalise_M(const matrix *m1, matrix *m2);
 bool transpose_M(matrix *m1);
 bool row_reduction_M(matrix *m1);
+bool inverse_M(matrix *m1);
 
 
 int exponential_M(const matrix *m1);
