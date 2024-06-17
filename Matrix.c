@@ -14,6 +14,17 @@ bool valid_matrix(Matrix *const matrix) {
     return true;
 }
 
+size_t numel(Matrix *const matrix) {
+    size_t result = 1;
+    if(valid_matrix(matrix) == false) {
+        return 0;
+    } else {
+        for(size_t i = 0; i < matrix->dimensionality; i++) {
+            result *= matrix->dimensions[i];
+        }
+    }
+    return result;
+}
 
 
 
@@ -83,6 +94,18 @@ bool matrix_initialise(Matrix *const matrix, size_t dimensionality, size_t *dime
  * Param: matrix - Matrix of interest
  * Return: void
  */
+size_t matrix_print_r(Matrix *const matrix, size_t dimension) {
+    
+    if(dimension == matrix->dimensionality) {
+        return 0;
+    }
+
+    for(size_t i = 0; i < dimension; i++) {
+        printf("%d ",matrix->data[i + matrix_print_r(matrix, dimension + 1)]);
+    }
+
+    return 0;
+}
 void matrix_print(Matrix *const matrix) {
 
     if(valid_matrix(matrix) == false) {
@@ -90,9 +113,8 @@ void matrix_print(Matrix *const matrix) {
         return;
     } else {
         //Use recursion
-        
 
-
+        matrix_print_r(matrix, matrix->dimensions[0]);
     }
 
     return;
