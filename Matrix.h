@@ -21,7 +21,7 @@ typedef struct Matrix {
 
 
 bool matrix_initialise(Matrix *const matrix, size_t dimensionality, size_t *dimensions, size_t dataSize, void *data);
-
+void matrix_print(Matrix *const matrix);
 
 
 
