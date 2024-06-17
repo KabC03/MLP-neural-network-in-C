@@ -1,5 +1,26 @@
 #include "matrix.h"
 
+//Helper functions
+
+//Check if a matrix is set up properly
+bool valid_matrix(Matrix *const matrix) {
+    if(matrix == NULL) {
+        return false;
+    } else if(matrix->data == NULL || matrix->dataSize == 0 || matrix->dimensionality == 0 || matrix->dimensions == NULL) {
+        return false;
+    } else {
+
+    }
+    return true;
+}
+
+
+
+
+
+
+//User functions
+
 
 /**
  * matrix_initialise
@@ -11,8 +32,9 @@
  *      dimensions - Array of dimensions (e.g [3,2,1] -> 3x2x1 matrix)
  *      dataSize - Size of the data in the matrix (e.g sizeof(int))
  *      *data - Flat array of data to be copied to matrix
+ * Return: T/F depending on if initialisation was succesful
  */
-bool matrix_initialise(Matrix *const matrix, size_t dimensionality, size_t *dimensions, size_t dataSize, uint8_t *data) {
+bool matrix_initialise(Matrix *const matrix, size_t dimensionality, size_t *dimensions, size_t dataSize, void *data) {
 
     if(dimensions == NULL || data == NULL || dimensionality == 0 || dataSize == 0) {
         return false;
@@ -43,6 +65,57 @@ bool matrix_initialise(Matrix *const matrix, size_t dimensionality, size_t *dime
 
     return true;
 }
+
+
+
+
+
+
+
+
+
+
+/**
+ * matrix_print
+ * ========================================
+ * Brief: Print a matrix (used for debugging)
+ * 
+ * Param: matrix - Matrix of interest
+ * Return: void
+ */
+void matrix_print(Matrix *const matrix) {
+
+    if(valid_matrix(matrix) == false) {
+        printf("Matrix not initialised\n");
+        return;
+    } else {
+        //Use recursion
+        
+
+
+    }
+
+    return;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
