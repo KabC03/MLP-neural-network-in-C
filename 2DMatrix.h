@@ -25,6 +25,6 @@ typedef struct Matrix {
 
 
 
-#endif // define
+#endif // MATRIX2D_H
 
 
