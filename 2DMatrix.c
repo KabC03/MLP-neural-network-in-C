@@ -18,11 +18,10 @@ bool matrix_2D_print(Matrix *const matrix) {
         return false;
     } else {
 
-        for(int i = 0; i < matrix->rows; i++) {
-            for(int j = 0; j < matrix->cols; i++) {
+        for(size_t i = 0; i < matrix->cols; i++) {
+            for(size_t j = 0; j < matrix->cols; j++) {
 
-                printf("%d ", (matrix->data)[(matrix->dataSize) * ((matrix->rows * i) + j)]);
-
+                printf("%d ", (matrix->data)[(matrix->dataSize) * ((i * matrix->cols) + j)]);
             }
             printf("\n");
         }
@@ -56,7 +55,7 @@ bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *
         matrix->rows = rows;
 
         matrix->data = malloc(dataSize * rows * cols);
-        memcpy(matrix->data, data, dataSize);
+        memcpy(matrix->data, data, dataSize * rows * cols);
     }
 
     return true;
@@ -150,4 +149,4 @@ bool matrix_2D_subtract(Matrix *const result, Matrix *const arg1, Matrix *const 
 
 
 
- 
+
