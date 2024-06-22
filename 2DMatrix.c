@@ -47,7 +47,7 @@ bool matrix_2D_print(Matrix *const matrix) {
  */
 bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *data, size_t dataSize) {
 
-    if(matrix == NULL || rows == 0 || cols == 0 || data == NULL) {
+    if(matrix == NULL || rows == 0 || cols == 0 || data == NULL || dataSize == 0) {
         return false;
     } else {
 
@@ -90,7 +90,7 @@ bool matrix_2D_add(Matrix *const result, Matrix *const arg1, Matrix *const arg2)
 
         for(size_t i = 0; i < (result->rows) * (result->cols); i++) {
 
-            (result->data)[i] = (arg1->data)[i] + (arg2->data)[i];
+            (result->data)[i * result->dataSize] = (arg1->data)[i * arg1->dataSize] + (arg2->data)[i * arg2->dataSize];
         }
 
     }
@@ -126,7 +126,7 @@ bool matrix_2D_subtract(Matrix *const result, Matrix *const arg1, Matrix *const 
 
         for(size_t i = 0; i < (result->rows) * (result->cols); i++) {
 
-            (result->data)[i] = (arg1->data)[i] - (arg2->data)[i];
+            (result->data)[i * result->dataSize] = (arg1->data)[i * arg1->dataSize] - (arg2->data)[i * arg2->dataSize];
         }
 
     }
