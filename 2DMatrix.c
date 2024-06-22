@@ -1,77 +1,31 @@
 #include "matrix.h"
 
-//Helper functions
 
-//Check if a matrix is set up properly
-bool valid_matrix(Matrix *const matrix) {
+
+
+/**
+ * matrix_2D_print
+ * ===============================================
+ * Brief: Print a 2D matrix of integers (used for debugging)
+ * 
+ * Param: *matrix - matrix of interest
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+bool matrix_2D_print(Matrix *const matrix) {
+
     if(matrix == NULL) {
         return false;
-    } else if(matrix->data == NULL || matrix->dataSize == 0 || matrix->dimensionality == 0 || matrix->dimensions == NULL) {
-        return false;
     } else {
 
-    }
-    return true;
-}
+        for(int i = 0; i < matrix->rows; i++) {
+            for(int j = 0; j < matrix->cols; i++) {
 
-size_t numel(Matrix *const matrix) {
-    size_t result = 1;
-    if(valid_matrix(matrix) == false) {
-        return 0;
-    } else {
-        for(size_t i = 0; i < matrix->dimensionality; i++) {
-            result *= matrix->dimensions[i];
+                printf("%d ", (matrix->data)[(matrix->dataSize) * ((matrix->rows * i) + j)]);
+
+            }
+            printf("\n");
         }
-    }
-    return result;
-}
-
-
-
-
-
-//User functions
-
-
-/**
- * matrix_initialise
- * ========================================
- * Brief: Initialises a matrix and sets it to an initial value
- * 
- * Param: matrix - Matrix of interest
- *      dimensionality - Number of dimensions
- *      dimensions - Array of dimensions (e.g [3,2,1] -> 3x2x1 matrix)
- *      dataSize - Size of the data in the matrix (e.g sizeof(int))
- *      *data - Flat array of data to be copied to matrix
- * Return: T/F depending on if initialisation was succesful
- */
-bool matrix_initialise(Matrix *const matrix, size_t dimensionality, size_t *dimensions, size_t dataSize, void *data) {
-
-    if(dimensions == NULL || data == NULL || dimensionality == 0 || dataSize == 0) {
-        return false;
-    } else {
-        matrix->dimensionality = dimensionality;
-        matrix->dataSize = dataSize;
-
-
-        matrix->dimensions = malloc(sizeof(size_t) * dimensionality);
-        if(matrix->dimensions == NULL) {
-            return false;
-        }
-        memcpy(matrix->dimensions, dimensions, dimensionality * sizeof(size_t));
-
-
-        //Calculate numel - probably not optimal since it can be passed but eh
-        size_t numel = 1;
-        for(int i = 0; i < dimensionality; i++) {
-            numel *= dimensions[i];
-        }
-        matrix->data = malloc(dataSize * numel);
-        if(matrix->data == NULL) {
-            free(matrix->dimensions);
-            return false;
-        }
-        memcpy(matrix->data, data, numel * dataSize);
     }
 
     return true;
@@ -79,45 +33,105 @@ bool matrix_initialise(Matrix *const matrix, size_t dimensionality, size_t *dime
 
 
 
+/**
+ * matrix_2D_initialise
+ * ===============================================
+ * Brief: Initialise a 2D matrix
+ * 
+ * Param: *matrix - matrix of interest
+ *        rows - rows of the matrix
+ *        cols - columns of the matrix
+ *        *data - data to put into the matrix
+ *        dataSize - sizeof(element) in bytes
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *data, size_t dataSize) {
 
+    if(matrix == NULL || rows == 0 || cols == 0 || data == NULL) {
+        return false;
+    } else {
 
+        matrix->cols = cols;
+        matrix->rows = rows;
 
+        matrix->data = malloc(dataSize * rows * cols);
+        memcpy(matrix->data, data, dataSize);
+    }
 
+    return true;
+}
 
 
 
 /**
- * matrix_print
- * ========================================
- * Brief: Print a matrix (used for debugging)
+ * matrix_2D_add
+ * ===============================================
+ * Brief: Add two matricies
  * 
- * Param: matrix - Matrix of interest
- * Return: void
+ * Param: *result - Result matrix
+ *        *arg1 - arg1 matrix
+ *        *arg2 - arg2 matrix
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
  */
-size_t matrix_print_r(Matrix *const matrix, size_t dimension) {
-    
-    if(dimension == matrix->dimensionality) {
-        return 0;
-    }
+bool matrix_2D_add(Matrix *const result, Matrix *const arg1, Matrix *const arg2) {
 
-    for(size_t i = 0; i < dimension; i++) {
-        printf("%d ",matrix->data[i + matrix_print_r(matrix, dimension + 1)]);
-    }
+    if(result == NULL || arg1 == NULL || arg2 == NULL) {
+        return false;
 
-    return 0;
-}
-void matrix_print(Matrix *const matrix) {
 
-    if(valid_matrix(matrix) == false) {
-        printf("Matrix not initialised\n");
-        return;
+    } else if(arg1->cols != arg2->cols 
+    || arg1->rows != arg2->rows 
+    || result->cols != arg1->cols 
+    || result->rows != arg1->rows) { //Incompatable dimensions
+        return false;
     } else {
-        //Use recursion
 
-        matrix_print_r(matrix, matrix->dimensions[0]);
+        for(size_t i = 0; i < (result->rows) * (result->cols); i++) {
+
+            (result->data)[i] = (arg1->data)[i] + (arg2->data)[i];
+        }
+
     }
 
-    return;
+    return true;
+}
+
+
+
+/**
+ * matrix_2D_subtract
+ * ===============================================
+ * Brief: Subtract two matricies
+ * 
+ * Param: *result - Result matrix
+ *        *arg1 - arg1 matrix
+ *        *arg2 - arg2 matrix
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+bool matrix_2D_subtract(Matrix *const result, Matrix *const arg1, Matrix *const arg2) {
+
+    if(result == NULL || arg1 == NULL || arg2 == NULL) {
+        return false;
+
+
+    } else if(arg1->cols != arg2->cols 
+    || arg1->rows != arg2->rows 
+    || result->cols != arg1->cols 
+    || result->rows != arg1->rows) { //Incompatable dimensions
+        return false;
+    } else {
+
+        for(size_t i = 0; i < (result->rows) * (result->cols); i++) {
+
+            (result->data)[i] = (arg1->data)[i] - (arg2->data)[i];
+        }
+
+    }
+
+    return true;
 }
 
 
@@ -136,28 +150,4 @@ void matrix_print(Matrix *const matrix) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+ 
