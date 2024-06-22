@@ -1,3 +1,3 @@
-# Matrix-library-in-C
+# MLP neural network in C
 
-Matrix library in C
+
