@@ -53,6 +53,7 @@ bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *
 
         matrix->cols = cols;
         matrix->rows = rows;
+        matrix->dataSize = dataSize;
 
         matrix->data = malloc(dataSize * rows * cols);
         memcpy(matrix->data, data, dataSize * rows * cols);
