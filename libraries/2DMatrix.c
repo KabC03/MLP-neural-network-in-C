@@ -193,6 +193,41 @@ bool matrix_2D_multiply(Matrix *const result, Matrix *const arg1, Matrix *const 
 
 
 
+
+/**
+ * matrix_2D_transpose
+ * ===============================================
+ * Brief: Transpose a matrix
+ * 
+ * Param: *result - Result matrix
+ *        *arg1 - arg1 matrix
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+bool matrix_2D_transpose(Matrix *const result, Matrix *const arg1) {
+
+    if(result == NULL || arg1 == NULL) {
+        return false;
+    } else if(result->cols != arg1->rows || result->rows != arg1->cols) {
+        return false;
+    } else {
+
+        for(size_t i = 0; i < arg1->rows; i++) {
+            for(size_t j = 0; j < arg1->cols; j++) {
+
+                (result->data)[(result->dataSize) * ((result->cols * j) + i)] = 
+                (arg1->data)[(arg1->dataSize) * ((arg1->cols * i) + j)];
+            }
+        }
+    }
+    return true;
+}
+
+
+
+
+
+
 //Transpose, Dot product, ReLU + Derivative, Sigmoid + Derivative
 
 
