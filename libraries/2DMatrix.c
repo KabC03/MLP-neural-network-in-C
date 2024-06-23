@@ -179,7 +179,9 @@ bool matrix_2D_multiply(Matrix *const result, Matrix *const arg1, Matrix *const 
                 //Zero before doing the sum - prevents needed additional sum temp variable
                 for(size_t k = 0; k < arg1->cols; k++) {
 
-                    (result->data)[(result->dataSize) * ((i * result->cols + j))] += (arg1->data)[(arg1->dataSize) * (k + (arg1->cols * i))] + (arg2->data)[(arg2->dataSize) * (j + (arg2->cols * k))];
+                    (result->data)[(result->dataSize) * ((i * result->cols + j))] += 
+                    (arg1->data)[(arg1->dataSize) * (k + (arg1->cols * i))] * 
+                    (arg2->data)[(arg2->dataSize) * (j + (arg2->cols * k))];
 
                 }
             }
