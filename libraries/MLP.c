@@ -96,7 +96,7 @@ bool MLP_ReLu(Matrix *const arg1, Matrix *const result) {
             if(*(float*)(&((arg1->data)[(result->dataSize) * i])) < 0) {
                 *(float*)(&((result->data)[(result->dataSize) * i])) = 0;
             } else {
-                continue;
+                *(float*)(&((result->data)[(result->dataSize) * i])) = *(float*)(&((arg1->data)[(result->dataSize) * i]));
             }
         }
 
