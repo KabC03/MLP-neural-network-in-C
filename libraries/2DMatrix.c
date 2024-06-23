@@ -107,7 +107,36 @@ bool MLP_ReLu(Matrix *const arg1, Matrix *const result) {
 
 
 
+/**
+ * MLP_ReLu_gradient
+ * ===============================================
+ * Brief: Calculates ReLu grqadient on a matrix
+ * 
+ * Param: *result - Output matrix with ReLu values
+ *        *arg1 - matrix to calculate ReLu gradient on
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result) {
 
+    if(result == NULL || arg1 == NULL) {
+        return false;
+    } else if(result->data == NULL || arg1->data == NULL || arg1->cols != result->cols || arg1->rows != result->rows) {
+        return false;
+    } else {
+
+        for(size_t i = 0; i < (arg1->cols * arg1->rows); i++) {
+
+            if(*(float*)(&((arg1->data)[(arg1->dataSize) * i])) < 0) {
+                *(float*)(&((arg1->data)[(arg1->dataSize) * i])) = 0;
+            } else {
+                *(float*)(&((arg1->data)[(arg1->dataSize) * i])) = 1;
+            }
+        }
+
+    }
+    return true;
+}
 
 
 
