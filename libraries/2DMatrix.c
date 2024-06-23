@@ -40,14 +40,13 @@ bool matrix_2D_print(Matrix *const matrix) {
  * Param: *matrix - matrix of interest
  *        rows - rows of the matrix
  *        cols - columns of the matrix
- *        *data - data to put into the matrix
  *        dataSize - sizeof(element) in bytes
  * Return: bool - T/F depending on if initialisation was successful
  * 
  */
-bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *data, size_t dataSize) {
+bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, size_t dataSize) {
 
-    if(matrix == NULL || rows == 0 || cols == 0 || data == NULL || dataSize == 0) {
+    if(matrix == NULL || rows == 0 || cols == 0 || dataSize == 0) {
         return false;
     } else {
 
@@ -59,7 +58,6 @@ bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *
         if(matrix->data == NULL) {
             return false;
         }
-        memcpy(matrix->data, data, dataSize * rows * cols);
     }
 
     return true;
@@ -69,9 +67,9 @@ bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *
 
 
 /**
- * matrix_2D_resize
+ * matrix_2D_set
  * ===============================================
- * Brief: Resize a 2D matrix
+ * Brief: Set or resize a 2D matrix
  * 
  * Param: *matrix - matrix of interest
  *        rows - rows of the matrix
@@ -81,7 +79,7 @@ bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *
  * Return: bool - T/F depending on if initialisation was successful
  * 
  */
-bool matrix_2D_resize(Matrix *const matrix, size_t rows, size_t cols, void *data, size_t dataSize) {
+bool matrix_2D_set(Matrix *const matrix, size_t rows, size_t cols, void *data, size_t dataSize) {
 
     if(matrix == NULL || rows == 0 || cols == 0 || data == NULL || dataSize == 0) {
         return false;
