@@ -56,11 +56,57 @@ bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, void *
         matrix->dataSize = dataSize;
 
         matrix->data = malloc(dataSize * rows * cols);
+        if(matrix->data == NULL) {
+            return false;
+        }
         memcpy(matrix->data, data, dataSize * rows * cols);
     }
 
     return true;
 }
+
+
+
+
+/**
+ * matrix_2D_resize
+ * ===============================================
+ * Brief: Resize a 2D matrix
+ * 
+ * Param: *matrix - matrix of interest
+ *        rows - rows of the matrix
+ *        cols - columns of the matrix
+ *        *data - data to put into the matrix
+ *        dataSize - sizeof(element) in bytes
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+bool matrix_2D_resize(Matrix *const matrix, size_t rows, size_t cols, void *data, size_t dataSize) {
+
+    if(matrix == NULL || rows == 0 || cols == 0 || data == NULL || dataSize == 0) {
+        return false;
+    } else {
+
+        matrix->cols = cols;
+        matrix->rows = rows;
+        matrix->dataSize = dataSize;
+
+
+        matrix->data = realloc(matrix->data, dataSize * rows * cols);
+        if(matrix->data == NULL) {
+            return false;
+        }
+        memcpy(matrix->data, data, dataSize * rows * cols);
+    }
+
+    return true;
+}
+
+
+
+
+
+
 
 
 
