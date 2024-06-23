@@ -83,16 +83,18 @@ bool MLP_ReLu(Matrix *const arg1, Matrix *const result) {
 
     if(result == NULL || arg1 == NULL) {
         return false;
-    } else if(result->data == NULL || arg1->data == NULL || arg1->cols != result->cols || arg1->rows != result->rows) {
+    } else if(result->data == NULL 
+    || arg1->data == NULL 
+    || arg1->cols != result->cols 
+    || arg1->rows != result->rows 
+    || arg1->dataSize != result->dataSize) {
         return false;
     } else {
 
         for(size_t i = 0; i < (arg1->cols * arg1->rows); i++) {
 
-            if(*(float*)(&((arg1->data)[(arg1->dataSize) * i])) < 0) {
-                *(float*)(&((arg1->data)[(arg1->dataSize) * i])) = 0;
-
-
+            if(*(float*)(&((arg1->data)[(result->dataSize) * i])) < 0) {
+                *(float*)(&((result->data)[(result->dataSize) * i])) = 0;
             } else {
                 continue;
             }
@@ -121,16 +123,20 @@ bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result) {
 
     if(result == NULL || arg1 == NULL) {
         return false;
-    } else if(result->data == NULL || arg1->data == NULL || arg1->cols != result->cols || arg1->rows != result->rows) {
+    } else if(result->data == NULL 
+    || arg1->data == NULL 
+    || arg1->cols != result->cols 
+    || arg1->rows != result->rows 
+    || arg1->dataSize != result->dataSize) {
         return false;
     } else {
 
         for(size_t i = 0; i < (arg1->cols * arg1->rows); i++) {
 
             if(*(float*)(&((arg1->data)[(arg1->dataSize) * i])) < 0) {
-                *(float*)(&((arg1->data)[(arg1->dataSize) * i])) = 0;
+                *(float*)(&((result->data)[(result->dataSize) * i])) = 0;
             } else {
-                *(float*)(&((arg1->data)[(arg1->dataSize) * i])) = 1;
+                *(float*)(&((result->data)[(result->dataSize) * i])) = 1;
             }
         }
 
