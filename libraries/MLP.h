@@ -20,4 +20,3 @@ bool MLP_mean_square_error(Matrix *const matrix, float expectedValue ,float *out
 
 #endif // MLP_H
 
-
