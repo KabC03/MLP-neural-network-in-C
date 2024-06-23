@@ -1,4 +1,4 @@
-// 2D matricies in C
+// Basic generic matrix algorithms for the network
 
 #ifndef MATRIX2D_H
 #define MATRIX2D_H
