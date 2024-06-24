@@ -44,13 +44,19 @@ typedef struct BMPInfo {
 
 
 
+bool input_to_MLP(const FILE *const image) {
 
+    //TODO
+
+
+    return true;
+}
 
 
 //Read into a column matrix (Greyscale and load)
 bool read_image_into_matrix(Matrix *const matrix, BMPHeader *const BMPheader, BMPInfo *const BMPinfo) {
 
-    
+    //TODO
 
 
     return true;
@@ -58,8 +64,7 @@ bool read_image_into_matrix(Matrix *const matrix, BMPHeader *const BMPheader, BM
 
 
 //Train model on a folder of BMP - output weights and stuff to a text file for use again (csv)
-bool train_MLP(char *dirName) {
-
+bool train_MLP(const char *const dirName) {
 
 
     //Image training
@@ -69,12 +74,12 @@ bool train_MLP(char *dirName) {
     Matrix inputLayer = {0,0,0,0};
     char fileNameBuffer[FILE_BUFFER_SIZE];
 
-    while(1) { //For file in directory (Do in C++)
+    while(1) { //TODO: For file in directory (Do in C++)
 
 
 
-        //Assign file name here
-
+        //TODO: Assign file name here
+        //TODO: FILE *currentImage = ...;
 
 
         image = fopen(fileNameBuffer, "rb");
@@ -104,14 +109,44 @@ bool train_MLP(char *dirName) {
                 printf("Image '%s' of incorrect dimensions\n",fileNameBuffer);
                 return false;
             }
-        }
+        } 
+        //TODO: input_to_MLP(currentImage);
+
     }
+
+
+    //TODO: Output to text file
+
 
     fclose(image);
     return true;
 
 }
 
+
+
+
+
+bool run_MLP(const char *const dirName) {
+
+    BMPHeader BMPheader;
+    BMPInfo BMPinfo;
+    FILE *image = NULL;
+    Matrix inputLayer = {0,0,0,0};
+    char fileNameBuffer[FILE_BUFFER_SIZE];
+
+    while(1) { //TODO: For each item in the directory
+
+        //TODO: input_to_MLP()
+
+        //TODO: Process neurons
+
+
+        //TODO: Output result to .txt file
+    }
+
+    return true;
+}
 
 
 
@@ -134,15 +169,15 @@ int main(int argc, char *argv[]) {
 
 
 
-    //Check if argv[1] is a valid folder (Do in C++) with <filesystem>
+    //TODO: Check if argv[1] is a valid folder (Do in C++) with <filesystem>
 
 
 
 
     if(strcmp(argv[2], TRAIN_FLAG) == 0) {
-        //Train model
+        //TODO: Train model
         
-        /* REMOVE COMMENT ONE FILESYSTEM IS STE UP IN C++
+        /* TODO: REMOVE COMMENT ONE FILESYSTEM IS STE UP IN C++
         if(train_MLP(directory) == false ){
         return 1;
         }
@@ -150,11 +185,7 @@ int main(int argc, char *argv[]) {
 
     } else if(strcmp(argv[2], RUN_FLAG) == 0) {
         //Prediction
-
-
-
-
-
+        //TODO: run_MLP();
 
     } else {
 
