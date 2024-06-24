@@ -278,6 +278,31 @@ bool matrix_2D_transpose(Matrix *const result, Matrix *const arg1) {
 
 
 
+/**
+ * matrix_2D_free
+ * ===============================================
+ * Brief: Free a matrix
+ * 
+ * Param: *matrix - Matrix of interest
+ * 
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+bool matrix_2D_free(Matrix *matrix) {
+
+    if(matrix == NULL) {
+        return false; 
+    } else if(matrix->data == NULL) {
+        return false;
+    } else {
+        matrix->cols = 0;
+        matrix->rows = 0;
+        matrix->dataSize = 0;
+        free(matrix->data);
+    }
+    return true;
+}
+
 
 
 
