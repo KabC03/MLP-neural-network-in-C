@@ -43,8 +43,8 @@ typedef struct BMPInfo {
 
 
 
-
-bool input_to_MLP(const FILE *const image) {
+//Input into MLP input layer
+bool input_to_MLP(const FILE *const image, Matrix *const matrix) {
 
     //TODO
 
