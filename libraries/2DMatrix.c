@@ -3,7 +3,6 @@
 
 
 
-
 /**
  * matrix_2D_print
  * ===============================================
@@ -22,7 +21,7 @@ bool matrix_2D_print(Matrix *const matrix) {
         for(size_t i = 0; i < matrix->rows; i++) {
             for(size_t j = 0; j < matrix->cols; j++) {
 
-                printf("%f ", *((float*)&((matrix->data)[(matrix->dataSize) * ((i * matrix->cols) + j)])));
+                printf("%d ", (matrix->data)[(matrix->dataSize) * ((i * matrix->cols) + j)]);
             }
             printf("\n");
         }
@@ -63,6 +62,15 @@ bool matrix_2D_initialise(Matrix *const matrix, size_t rows, size_t cols, size_t
 
     return true;
 }
+
+
+
+
+
+
+
+
+
 
 
 
@@ -273,7 +281,20 @@ bool matrix_2D_transpose(Matrix *const result, Matrix *const arg1) {
 
 
 
-//Transpose, Dot product, ReLU + Derivative, Sigmoid + Derivative
+
+
+
+
+
+//Dot product, ReLU + Derivative, Sigmoid + Derivative, MSE
+
+
+
+
+
+
+
+
 
 
 
