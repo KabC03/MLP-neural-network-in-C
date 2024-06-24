@@ -4,10 +4,12 @@
 #include <stdbool.h>
 #include <stdio.h>
 #include <math.h>
+#include <string.h>
 #define FILE_BUFFER_SIZE 100
 
 
-
+#define TRAIN_FLAG "-t"
+#define RUN_FLAG "-r"
 
 
 
@@ -55,7 +57,7 @@ bool read_image_into_matrix(Matrix *const matrix, BMPHeader *const BMPheader, BM
 }
 
 
-
+//Train model on a folder of BMP - output weights and stuff to a text file for use again (csv)
 bool train_MLP(char *dirName) {
 
 
@@ -119,16 +121,6 @@ bool train_MLP(char *dirName) {
 int main(int argc, char *argv[]) {
 
     //Command line
-    /*
-    Format: ./main.c ./Directory -flags 
-
-        ./Directory - directory of bmp
-
-        Flags (max one):
-        -t : train Train on the dataset
-        -r : run  Run on the dataset
-    */
-
 
     if(argc != 3) {
         printf("Format: ./main Path -flags\n\n");
@@ -142,18 +134,33 @@ int main(int argc, char *argv[]) {
 
 
 
-
-
-    //Prediction
-
+    //Check if argv[1] is a valid folder (Do in C++) with <filesystem>
 
 
 
 
+    if(strcmp(argv[2], TRAIN_FLAG) == 0) {
+        //Train model
+        
+        /* REMOVE COMMENT ONE FILESYSTEM IS STE UP IN C++
+        if(train_MLP(directory) == false ){
+        return 1;
+        }
+        */
+
+    } else if(strcmp(argv[2], RUN_FLAG) == 0) {
+        //Prediction
 
 
 
 
+
+
+    } else {
+
+        printf("Unrecognised flag'%s'\n",argv[2]);
+        return 1;
+    }
 
 
 
