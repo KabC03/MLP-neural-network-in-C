@@ -40,7 +40,14 @@ typedef struct BMPInfo {
 
 
 
+//Read into a column matrix
+bool read_image_into_matrix(Matrix *const matrix, BMPHeader *const BMPheader, BMPInfo *const BMPinfo) {
 
+    matrix_2D_initialise(matrix, BMPinfo->width * BMPinfo->height, 1, sizeof(int));
+
+
+
+}
 
 
 
@@ -67,6 +74,7 @@ int main(void) {
     }
 
 
+    Matrix inputLayer;
     printf("Width: %d\n", BMPinfo.width);
     printf("Height: %d\n", BMPinfo.height);
     printf("Bit Depth: %d\n", BMPinfo.bits);
@@ -104,4 +112,4 @@ int main(void) {
 
 
 
- 
+
