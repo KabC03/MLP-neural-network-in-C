@@ -5,28 +5,33 @@
 
 typedef enum RETURN_CODE {
 
-    _NULL_PTR_PASS_,
-    _UNRECOGNISED_ARGUMENT_PASS_,
 
-    _MEMORY_ALLOCATION_FAILURE_,
-    _INITIALISATION_FAILURE,
+    _INVALID_ARG_PASS_,      //Invalid argument (e.g NULL ptr)
+    _INVALID_MODE_PASS_,     //Used for functions that might accept modes based on a char
+
+    _ALLOC_FAILURE_,         //If dynamic memory allocation fails
+
+    _FILE_NOT_OPENED_,       //If a file was not opened
+    _FILE_NOT_CLOSED_,       //If a file was not closed
+
+    _ALREADY_EXISTS_,        //If an item already exists and trying to create another
+
+    _KEY_ERROR_,             //Key error (e.g key does not exist in dict)
+    _VALUE_ERROR_,           //Value error (e.g value not found in array or dict)
+
+    _INDEX_ERROR_,           //Index error (e.g access beyond array bounds)
 
 
-    _FAILED_TO_OPEN_FILE_,
-    _FAILED_TO_CLOSE_FILE_,
 
-    _TRUE_,
-    _FALSE_,
+    _CRITICAL_ERROR_,        //Exit the program ASAP - warning to caller
+    _INTERNAL_ERROR_,        //Program did something it wasn't supposed to (wrong logic)
 
-
-    _GENERIC_FAILURE_,
-    _NEUTRAL_,
-    _SUCCESS_,
+    _SUCCESS_,               //Function ran successfully
 
 } RETURN_CODE;
 
 
 
-#endif //RETURN_CODE_H 
+#endif //RETURN_CODE_H
 
- 
+
