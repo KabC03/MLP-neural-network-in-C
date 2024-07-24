@@ -43,6 +43,11 @@ typedef struct BMPInfo {
 
 
 
+
+
+
+
+
 int main(void) {
 
 
