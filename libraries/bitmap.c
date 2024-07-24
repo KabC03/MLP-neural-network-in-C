@@ -1,5 +1,5 @@
 //25, Jul, 2024
-#include "bitmaps.h"
+#include "bitmap.h"
 #define BITMAP_FILE_SIGNATURE 0x4D42
 #define BITS_PER_BYTE 8
 #define PAD_CONSTANT 4
