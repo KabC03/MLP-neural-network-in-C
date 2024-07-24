@@ -1,4 +1,5 @@
-#include "bitmap.h"
+//25, Jul, 2024
+#include "bitmaps.h"
 #define BITMAP_FILE_SIGNATURE 0x4D42
 #define BITS_PER_BYTE 8
 #define PAD_CONSTANT 4
@@ -28,12 +29,12 @@ TODO:
 RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput) {
 
     if(bitmapPath == NULL || bitmapImageOutput == NULL) {
-        return _NULL_PTR_PASS_;
+        return _INVALID_ARG_PASS_;
     } else {
 
         FILE *bitmapFptr = fopen(bitmapPath, "rb");
         if(bitmapFptr == NULL) {
-            return _FAILED_TO_OPEN_FILE_; 
+            return _FILE_NOT_OPENED_; 
         }
 
 
@@ -42,17 +43,17 @@ RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput)
 
         //Read header
         if(fread(&(bitmapImageOutput->bitmapHeader), sizeof(BitmapHeader), 1, bitmapFptr) != 1) {
-            return _GENERIC_FAILURE_;
+            return _INTERNAL_ERROR_;
         }
         //Read the metadata
         if(fread(&(bitmapImageOutput->bitmapMetadata), sizeof(BitmapMetadata), 1, bitmapFptr) != 1) {
-            return _GENERIC_FAILURE_;
+            return _INTERNAL_ERROR_;
         }
 
 
         //Check file is a bitmap
         if(bitmapImageOutput->bitmapHeader.fileType != BITMAP_FILE_SIGNATURE) {
-            return _GENERIC_FAILURE_;
+            return _INTERNAL_ERROR_;
         }
 
         //Read data into a vector - NOTE: CURRENTLY < 8 BIT PIXEL DEPTH NOT SUPPORTED
@@ -64,16 +65,16 @@ RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput)
         size_t paddingPerRow = (PAD_CONSTANT - (bitmapImageOutput->bitmapMetadata.imageWidth * bytesPerPixel % PAD_CONSTANT)) % PAD_CONSTANT;
 
         if(vector_initialise(&(bitmapImageOutput->bitmapData), bytesPerPixel) == false) {
-            return _GENERIC_FAILURE_;
+            return _INTERNAL_ERROR_;
         }
         void *tempBuffer = malloc(numberOfPixelsInRow * bytesPerPixel);
         if(tempBuffer == NULL) {
-            return _MEMORY_ALLOCATION_FAILURE_;
+            return _ALLOC_FAILURE_;
         }
 
         //Seek passed the metadata
         if(fseek(bitmapFptr, bitmapImageOutput->bitmapHeader.dataOffset, SEEK_SET) != 0) {
-            return _GENERIC_FAILURE_;
+            return _INTERNAL_ERROR_;
         }
 
 
@@ -81,20 +82,20 @@ RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput)
 
             //Read all pixels
             if(fread(tempBuffer, bytesPerPixel, numberOfPixelsInRow, bitmapFptr) != numberOfPixelsInRow) {
-                return _GENERIC_FAILURE_;
+                return _INTERNAL_ERROR_;
             }
 
 
             //Write numberOfPixels from tempBuffer
             if(vector_quick_append(&(bitmapImageOutput->bitmapData), tempBuffer, numberOfPixelsInRow) == false) {
-                return _GENERIC_FAILURE_;
+                return _INTERNAL_ERROR_;
             }
 
             if(paddingPerRow != 0) {
 
                 //Skip passed padding
                 if(fseek(bitmapFptr, paddingPerRow, SEEK_CUR) != 0) {
-                    return _GENERIC_FAILURE_;
+                    return _INTERNAL_ERROR_;
                 }
             }
         }
@@ -117,9 +118,6 @@ RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput)
 
 
 
-
-
-
 /**
  * bitmap_greyscale 
  * ===============================================
@@ -133,31 +131,37 @@ RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput)
 RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage) {
 
     if(bitmapImage == NULL) {
-        return _NULL_PTR_PASS_;
+        return _INVALID_ARG_PASS_;
     } else {
 
+        //Have to place this here otherwies compiler complains
+        //Gray = 0.299 * R + 0.587 * G + 0.144 * B 
+        uint8_t red = 0;
+        uint8_t blue= 0;
+        uint8_t green = 0;
+
+        uint8_t grey = 0;
+
+        uint32_t *pixel = 0;
+
+
+        size_t numberOfPixels = vector_get_length(&(bitmapImage->bitmapData)) + 1;
         //Will add more depths later
+        
+
+
+
+
         switch (bitmapImage->bitmapMetadata.bitsPerPixel) {
         case 24:
 
 
-            //Gray = 0.299 * R + 0.587 * G + 0.144 * B 
-            uint8_t red = 0;
-            uint8_t blue= 0;
-            uint8_t green = 0;
-
-            uint8_t grey = 0;
-
-            uint32_t *pixel = 0;
-
-
-            size_t numberOfPixels = vector_get_length(&(bitmapImage->bitmapData)) + 1;
             for(size_t i = 0; i < numberOfPixels; i++) {
 
                 pixel = (uint32_t*)vector_get_index(&(bitmapImage->bitmapData), i);
                 if(pixel == NULL) {
                     //Unexpected NULL ptr - will make better later
-                    return _GENERIC_FAILURE_;
+                    return _INTERNAL_ERROR_;
                 }
 
                 //WARNING: assuming BGR format
@@ -178,7 +182,7 @@ RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage) {
 
                 //Set new greyscale pixel
                 if(vector_set_index(&(bitmapImage->bitmapData), i, &newPixel) == false) {
-                    return _GENERIC_FAILURE_;
+                    return _INTERNAL_ERROR_;
                 }
 
             }
@@ -187,7 +191,7 @@ RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage) {
             break;
         
         default:
-            return _GENERIC_FAILURE_;
+            return _INTERNAL_ERROR_;
             break;
         }
 
@@ -219,7 +223,7 @@ RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage) {
 RETURN_CODE bitmap_reconstruct_image(BitmapImage *bitmapImage, char *imagePath) {
 
     if(bitmapImage == NULL || imagePath == NULL) {
-        return _NULL_PTR_PASS_;
+        return _INVALID_ARG_PASS_;
     } else {
 
         //Write the metadata
@@ -227,18 +231,18 @@ RETURN_CODE bitmap_reconstruct_image(BitmapImage *bitmapImage, char *imagePath) 
 
         FILE *producedImagePtr = fopen(imagePath, "wb");
         if(producedImagePtr == NULL) {
-            return _FAILED_TO_OPEN_FILE_;
+            return _FILE_NOT_OPENED_;
         }
 
 
 
         //Write the metadata
         if(fwrite(&(bitmapImage->bitmapHeader), sizeof(BitmapHeader), 1, producedImagePtr) != 1) {
-            return _GENERIC_FAILURE_;
+            return _INTERNAL_ERROR_;
         }
 
         if(fwrite(&(bitmapImage->bitmapMetadata), sizeof(BitmapMetadata), 1, producedImagePtr) != 1) {
-            return _GENERIC_FAILURE_;
+            return _INTERNAL_ERROR_;
         }
 
 
@@ -258,7 +262,7 @@ RETURN_CODE bitmap_reconstruct_image(BitmapImage *bitmapImage, char *imagePath) 
             padding = calloc(paddingPerRow, 1);
 
             if(padding == NULL) {
-                return _MEMORY_ALLOCATION_FAILURE_;
+                return _ALLOC_FAILURE_;
             }
         }
 
@@ -269,14 +273,14 @@ RETURN_CODE bitmap_reconstruct_image(BitmapImage *bitmapImage, char *imagePath) 
             const void *dataToBeWritten = vector_get_index(&(bitmapImage->bitmapData), i * numberOfPixelsInRow);
             //Write the pixels
             if(fwrite(dataToBeWritten, numberOfPixelsInRow * bytesPerPixel, 1, producedImagePtr) != 1) {
-                return _GENERIC_FAILURE_;
+                return _INTERNAL_ERROR_;
             }
 
 
             if(paddingPerRow != 0) {
                 //Write the padding
                 if(fwrite(padding, paddingPerRow, 1, producedImagePtr) != 1) {
-                    return _GENERIC_FAILURE_;
+                    return _INTERNAL_ERROR_;
                 }
             }
 
@@ -305,7 +309,7 @@ RETURN_CODE bitmap_reconstruct_image(BitmapImage *bitmapImage, char *imagePath) 
 RETURN_CODE bitmap_destroy(BitmapImage *bitmapImage) {
 
     if(bitmapImage == NULL) {
-        return _NULL_PTR_PASS_;
+        return _INVALID_ARG_PASS_;
     } else {
 
         vector_destroy(&(bitmapImage->bitmapData));
@@ -316,34 +320,29 @@ RETURN_CODE bitmap_destroy(BitmapImage *bitmapImage) {
 
 
 
+/**
+ * bitmap_return_metadata
+ * ===============================================
+ * Brief: Return metadata for an image 
+ * 
+ * Param: *bitmapImage - Bitmap of interest 
+ *        *outputMetadata 
+ * 
+ * Return: bool - T/F depending on if addition was successful
+ * 
+ */
+RETURN_CODE bitmap_return_metadata(BitmapImage *bitmapImage, BitmapMetadata *outputMetadata) {
 
+    if(bitmapImage == NULL || outputMetadata == NULL) {
+        return _INVALID_ARG_PASS_;
 
+    } else {
 
+        *outputMetadata = bitmapImage->bitmapMetadata;
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    return _SUCCESS_;
+}
 
 
 
