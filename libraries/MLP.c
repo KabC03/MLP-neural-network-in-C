@@ -3,6 +3,7 @@
 #define MLP_RAND_MIN 0.001
 #define square(value) (value * value)
 #define HERE printf("HERE\n");
+#define BYTE_SIZE 255
 
 
 //Data for the hidden layer
@@ -244,7 +245,7 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfLayers, size
 /**
  * MLP_evaluate_input
  * ===============================================
- * Brief: Evaluate a network output (requires inputs to be set)
+ * Brief: Evaluate a network output (requires inputs to be set) - ASSUMES R-G-B in GREYSCALE format
  * 
  * Param: *network - Network of interest
  *        
@@ -258,6 +259,25 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
     } else {
 
+
+        //Input data to network
+        /*
+        TODO:
+        - Convert input vector data to floats
+        - Normalise matrix
+        */
+
+
+        //Run model
+        /*
+        TODO:
+        for layer in layers:
+        
+        preActivatedOutput = [Weights]*[input] + [Bias]; //STORE THIS
+        output = act(preActivatedOutput); //STORE THIS
+        input = output;
+
+        */
 
     }
 
