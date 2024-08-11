@@ -170,7 +170,7 @@ bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result) {
  * Brief: Create a MLP network
  * 
  * Param: *network - Network to be instantiated
- *        numberOfLayers - Number of layers to network (must be at least 3 to account for input and output layers)
+ *        numberOfLayers - Number of layers to network (When = 3 this means there is a direct connection from input -> output layer)
  *        *neuronsPerLayer - Array of neurons per layer
  *        
  * Return: bool - T/F depending on if initialisation was successful
@@ -184,13 +184,13 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfLayers, size
     } else {
 
         
-        if(vector_initialise(&(network->hiddenLayers), sizeof(NetworkLayer)) == false) { //Vector of matricies
+        if(vector_initialise(&(network->networkLayers), sizeof(NetworkLayer)) == false) { //Vector of matricies
             return _INTERNAL_ERROR_;
         }
-        if(vector_resize(&(network->hiddenLayers), numberOfLayers) == false) {
+        if(vector_resize(&(network->networkLayers), numberOfLayers) == false) {
             return _INTERNAL_ERROR_;
         }
-        for(size_t i = 0; i < numberOfLayers - 1; i++) { //Initialise each matrix layer, going to layers - 1 since output does not have weights/biases
+        for(size_t i = 0; i < numberOfLayers - 1; i++) { //Initialise each matrix layer, going to layers - 1 since final layer just buffers the output
 
             NetworkLayer currentNetworkLayer;
 
@@ -226,10 +226,11 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfLayers, size
 
 
             //Insert layer to network
-            if(vector_insert_index(&(network->hiddenLayers), i, &currentNetworkLayer) == false) {
+            if(vector_insert_index(&(network->networkLayers), i, &currentNetworkLayer) == false) {
                 return _INTERNAL_ERROR_;
             }
         }
+
     }
 
     return _SUCCESS_;
@@ -261,7 +262,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
 
 
-        size_t numberOfHiddenLayers = vector_get_length(&(network->hiddenLayers));
+        size_t numberOfHiddenLayers = vector_get_length(&(network->networkLayers));
         for(size_t i = 0; i < numberOfHiddenLayers; i++) {
 
 

@@ -16,7 +16,8 @@
 
 typedef struct Network {
 
-    Vector hiddenLayers; //Hidden layer data (metadata)
+    Vector networkLayers; //Layer data (metadata) - note network output is stored in the last layers output matrix
+
 
 } Network;
 
