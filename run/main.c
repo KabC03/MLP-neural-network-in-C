@@ -17,7 +17,13 @@ int main(void) {
 
 
     //srand(time(NULL)); //Use default seed of 1
-
+    Network network;
+    size_t neuronsPerHiddenLayer[] = {5};
+    
+    if(MLP_initialise_network(&network, 10, 1, neuronsPerHiddenLayer, 2) != _SUCCESS_) {
+        printf("Failed to initialise network\n");
+        return -1;
+    }
 
 
 

@@ -175,7 +175,6 @@ bool vector_insert_index(Vector *const vector, size_t index, const void *const d
             
         } else {
             for(size_t i = vector->top; i > index; i--) {
-                printf("Index = %zu\n",i);
                 memcpy(&((vector->data)[(i + 1) * (vector->elementSize)]), &((vector->data)[(i*vector->elementSize)]), vector->elementSize);
             }
 
@@ -328,7 +327,7 @@ bool vector_set_index(Vector *const vector, size_t index, const void *const data
         return false;
     } else {
 
-        if(index + 1 > vector->top || vector->data == NULL) {
+        if(index > vector->top || vector->data == NULL) {
             return false;
 
         } else {
@@ -392,6 +391,3 @@ TODO:
 - vector_shrink_to_fit
 - vector_set_size (set the size of the vector)
 */
-
-
-

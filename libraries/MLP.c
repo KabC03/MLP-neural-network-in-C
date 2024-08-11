@@ -2,6 +2,11 @@
 #define MLP_RAND_RANGE 0.1
 #define MLP_RAND_MIN 0.001
 #define square(value) (value * value)
+#define HERE printf("HERE\n");
+
+
+
+
 
 /**
  * MLP_randomise
@@ -148,14 +153,14 @@ bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result) {
 
 
 
-typedef struct Network {
+//Data for the hidden layer
+typedef struct HiddenLayer {
 
-    Matrix inputLayer;   //Matrix of input weights
-    Vector hiddenLayers; //Vector of matricies of hidden layer weights
-    Matrix outputLayer;  //Vector of output layer weights
+    Matrix weight; //Weight for each neuron
+    Matrix bias;   //Bias
+    Matrix output; //Output of the layer (after activation, bias, etc)
 
-} Network;
-
+} HiddenLayer;
 
 
 /**
@@ -181,34 +186,58 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfInputNeurons
 
         //Initialise hidden layer
         if(matrix_2D_initialise(&(network->inputLayer), numberOfInputNeurons, 1, sizeof(float)) == false) {
+
             return _INTERNAL_ERROR_;
         }
 
         
         //Initialise hidden layer
-        if(vector_initialise(&(network->hiddenLayers), sizeof(Matrix)) == false) { //Vector of matricies
+        if(vector_initialise(&(network->hiddenLayers), sizeof(HiddenLayer)) == false) { //Vector of matricies
             return _INTERNAL_ERROR_;
         }
         if(vector_resize(&(network->hiddenLayers), numberOfHiddenLayers) == false) {
             return _INTERNAL_ERROR_;
         }
         for(size_t i = 0; i < numberOfHiddenLayers; i++) { //Initialise each matrix layer
-            Matrix *currentHiddenLayer = (Matrix*)vector_get_index(&(network->hiddenLayers), i);
-            if(currentHiddenLayer == NULL) {
+            HiddenLayer currentHiddenLayer;
+
+            //Initialise biases
+            if(i == numberOfHiddenLayers - 1) { //Last hidden layer connects to output neurons
+                if(matrix_2D_initialise(&(currentHiddenLayer.bias), numberOfOutputNeurons, 1, sizeof(float)) == false) {
+                    return _INTERNAL_ERROR_;
+                }
+            } else { //This is really inefficient but makes the code cleaner - consider optimising later
+                if(matrix_2D_initialise(&(currentHiddenLayer.bias), hiddenNeuronsPerLayer[i + 1], 1, sizeof(float)) == false) {
+                    return _INTERNAL_ERROR_;
+                }
+            }
+            if(MLP_randomise(&(currentHiddenLayer.bias), MLP_RAND_RANGE, MLP_RAND_MIN) == false) { //Randomise biases
                 return _INTERNAL_ERROR_;
             }
 
-            if(matrix_2D_initialise(currentHiddenLayer, hiddenNeuronsPerLayer[i], 1, sizeof(float)) == false) {
+
+            //Initialise weights
+            if(i == numberOfHiddenLayers - 1) { //Last hidden layer connects to output neurons
+                if(matrix_2D_initialise(&(currentHiddenLayer.weight), numberOfOutputNeurons, hiddenNeuronsPerLayer[i], sizeof(float)) == false) {
+                    return _INTERNAL_ERROR_;
+                }
+            } else { //This is really inefficient but makes the code cleaner - consider optimising later
+                if(matrix_2D_initialise(&(currentHiddenLayer.weight), hiddenNeuronsPerLayer[i + 1], hiddenNeuronsPerLayer[i], sizeof(float)) == false) {
+                    return _INTERNAL_ERROR_;
+                }
+            }
+
+
+            if(MLP_randomise(&(currentHiddenLayer.weight), MLP_RAND_RANGE, MLP_RAND_MIN) == false) { //Randomise weights
                 return _INTERNAL_ERROR_;
             }
 
-            //Randomise each hidden layer with some value
-
-            if(MLP_randomise(currentHiddenLayer, MLP_RAND_RANGE, MLP_RAND_MIN) == false) {
+            //Insert layer to network
+            if(vector_insert_index(&(network->hiddenLayers), i, &currentHiddenLayer) == false) {
                 return _INTERNAL_ERROR_;
             }
         }
-        
+
 
         //Initialise output layer
         if(matrix_2D_initialise(&(network->outputLayer), numberOfOutputNeurons, 1, sizeof(float)) == false) {
@@ -227,7 +256,17 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfInputNeurons
 
 
 
-
+/**
+ * MLP_evaluate_input
+ * ===============================================
+ * Brief: Input a vector to the network and evaluate an output
+ * 
+ * Param: *network - Network of interest
+ *        *inputVector - Input vector to input layer
+ *        
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
 
 
 
