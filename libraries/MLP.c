@@ -171,7 +171,8 @@ bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result) {
  * 
  * Param: *network - Network to be instantiated
  *        numberOfLayers - Number of layers to network (When = 2 this means there is a direct connection from input -> output layer)
- *        *neuronsPerLayer - Array of neurons per layer
+ *        *neuronsPerLayer - Array of neurons per layer, MUST be 1 longer than the number of layers, where last number is DUPLICATED
+ *                      E.g if numberOfLayers = 2, then len(neuronsPerLayer) MUST = 3, where arr[1] == arr[2], this is NOT checked by the function for performance
  *        
  * Return: bool - T/F depending on if initialisation was successful
  * 
@@ -190,7 +191,7 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfLayers, size
         if(vector_resize(&(network->networkLayers), numberOfLayers) == false) {
             return _INTERNAL_ERROR_;
         }
-        for(size_t i = 0; i < numberOfLayers - 1; i++) { //Initialise each matrix layer, going to layers - 1 since final layer just buffers the output
+        for(size_t i = 0; i < numberOfLayers; i++) { //NOTE: since going to i < layers, MUST make sure that last layer is DUPLICATED, e.g if number layers = 2, per layer = {x,y,z}
 
             NetworkLayer currentNetworkLayer;
 
