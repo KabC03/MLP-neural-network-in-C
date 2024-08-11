@@ -273,7 +273,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
         TODO:
         for layer in layers:
         
-        preActivatedOutput = [Weights]*[input] + [Bias]; //STORE THIS
+        preActivatedOutput = [weights]*[input] + [bias]; //STORE THIS
         output = act(preActivatedOutput); //STORE THIS
         input = output;
 
