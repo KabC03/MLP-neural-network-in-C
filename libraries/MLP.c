@@ -257,22 +257,6 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
     } else {
 
-        //Evaluate hidden layers
-        //Matrix *prevLayerOutput = vector_get_index(&(network->hiddenLayers), 0); //Set to input layer
-
-
-
-        size_t numberOfHiddenLayers = vector_get_length(&(network->networkLayers));
-        for(size_t i = 0; i < numberOfHiddenLayers; i++) {
-
-
-
-        }
-
-        //Evaluate output layer
-
-
-
 
     }
 
