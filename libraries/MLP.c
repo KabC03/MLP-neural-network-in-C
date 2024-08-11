@@ -170,7 +170,7 @@ bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result) {
  * Brief: Create a MLP network
  * 
  * Param: *network - Network to be instantiated
- *        numberOfLayers - Number of layers to network (When = 3 this means there is a direct connection from input -> output layer)
+ *        numberOfLayers - Number of layers to network (When = 2 this means there is a direct connection from input -> output layer)
  *        *neuronsPerLayer - Array of neurons per layer
  *        
  * Return: bool - T/F depending on if initialisation was successful
@@ -178,7 +178,7 @@ bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result) {
  */
 RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfLayers, size_t *neuronsPerLayer) {
 
-    if(network == NULL || numberOfLayers < 3 || neuronsPerLayer == NULL) {
+    if(network == NULL || numberOfLayers < 2 || neuronsPerLayer == NULL) { //2 layers means inputs are directly connected to output
         return _INVALID_ARG_PASS_;
 
     } else {
