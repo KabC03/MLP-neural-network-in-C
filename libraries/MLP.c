@@ -281,9 +281,9 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfInputNeurons
 
 
 /**
- * MLP_evaluate_input
+ * MLP_input_to_network
  * ===============================================
- * Brief: Input a vector to the network and evaluate an output
+ * Brief: Input a vector to a network but do not evaluate it
  * 
  * Param: *network - Network of interest
  *        *inputVector - Input vector to input layer
@@ -291,7 +291,19 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfInputNeurons
  * Return: bool - T/F depending on if initialisation was successful
  * 
  */
+RETURN_CODE MLP_input_to_network(Network *network, Vector *inputToNetwork) {
 
+    if(network == NULL || inputToNetwork == NULL) {
+        return _INVALID_ARG_PASS_;
+    } else {
+
+        if(matrix_2D_set(&(network->inputLayer), network->inputLayer.rows, network->inputLayer.cols, (void*)(inputToNetwork->data), sizeof(float)) == false) {
+            return _INTERNAL_ERROR_;
+        }
+    }
+
+    return _SUCCESS_;
+}
 
 
 

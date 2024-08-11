@@ -1,4 +1,5 @@
 #include "../libraries/MLP.h"
+#include "../libraries/bitmap.h"
 #include <stdlib.h>
 #include <stdint.h>
 #include <stdbool.h>
@@ -26,6 +27,19 @@ int main(void) {
     }
 
 
+
+    BitmapImage inputImage;
+    if(bitmap_enstantiate("../data/test_image", &inputImage) == false) {
+        printf("Failed to open bitmap\n");
+        return -1;
+    }
+
+
+
+    if(MLP_input_to_network(&network, &(inputImage.bitmapData)) != _SUCCESS_) {
+        printf("Failed to input data to network\n");
+        return -1;
+    }
 
     return 0;
 }
