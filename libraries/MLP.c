@@ -201,7 +201,7 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfInputNeurons
         for(size_t i = 0; i < numberOfHiddenLayers; i++) { //Initialise each matrix layer
             HiddenLayer currentHiddenLayer;
 
-            //Initialise biases
+            //Initialise biases - Rows: Number of neurons in next layer, Cols: 1
             if(i == numberOfHiddenLayers - 1) { //Last hidden layer connects to output neurons
                 if(matrix_2D_initialise(&(currentHiddenLayer.bias), numberOfOutputNeurons, 1, sizeof(float)) == false) {
                     return _INTERNAL_ERROR_;
@@ -216,7 +216,7 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfInputNeurons
             }
 
 
-            //Initialise weights
+            //Initialise weights - Rows: Number of neurons in next layer, Cols: Number of neurons in current layer
             if(i == numberOfHiddenLayers - 1) { //Last hidden layer connects to output neurons
                 if(matrix_2D_initialise(&(currentHiddenLayer.weight), numberOfOutputNeurons, hiddenNeuronsPerLayer[i], sizeof(float)) == false) {
                     return _INTERNAL_ERROR_;
