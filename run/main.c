@@ -9,7 +9,7 @@
 #define FILE_BUFFER_SIZE 100
 #define NUM_LAYERS 3
 //#define NEURONS_PER_LAYER {inputImage.bitmapMetadata.imageHeight * inputImage.bitmapMetadata.imageWidth, 100, 2}
-#define NEURONS_PER_LAYER {20, 100, 2}
+#define NEURONS_PER_LAYER {20, 100, 2, 2} /*NOTE: last 2 numbers MUST be the same to properly initilise the network*/
 
 #define TRAIN_FLAG "-t"
 #define RUN_FLAG "-r"
