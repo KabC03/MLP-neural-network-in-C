@@ -10,7 +10,9 @@
 #include <stdint.h>
 #include <time.h>
 #include <limits.h>
-#include "2Dmatrix.h"
+#include "2DMatrix.h"
+#include "vector.h"
+#include "return codes.h"
 
 bool MLP_randomise(Matrix *const matrix, float range, float min);
 bool MLP_mean_square_error(Matrix *const matrix, float expectedValue ,float *output);
