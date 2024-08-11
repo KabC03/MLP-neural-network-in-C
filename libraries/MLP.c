@@ -156,9 +156,10 @@ bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result) {
 //Data for the hidden layer
 typedef struct HiddenLayer {
 
-    Matrix weight; //Weight for each neuron
-    Matrix bias;   //Bias
-    Matrix output; //Output of the layer (after activation, bias, etc)
+    Matrix weight;              //Weight for each neuron
+    Matrix bias;                //Bias
+    Matrix preActivationOutput; //Store preactivation output for back propagation
+    Matrix output;              //Output of the layer (after activation, bias, etc)
 
 } HiddenLayer;
 
@@ -200,6 +201,29 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfInputNeurons
         }
         for(size_t i = 0; i < numberOfHiddenLayers; i++) { //Initialise each matrix layer
             HiddenLayer currentHiddenLayer;
+
+            //Initialise pre-activation values - Rows: 1, Cols: Number of neurons in next layer
+            if(i == numberOfHiddenLayers - 1) { //Last hidden layer connects to output neurons
+                if(matrix_2D_initialise(&(currentHiddenLayer.preActivationOutput), numberOfOutputNeurons, 1, sizeof(float)) == false) {
+                    return _INTERNAL_ERROR_;
+                }
+            } else { //This is really inefficient but makes the code cleaner - consider optimising later
+                if(matrix_2D_initialise(&(currentHiddenLayer.preActivationOutput), hiddenNeuronsPerLayer[i + 1], 1, sizeof(float)) == false) {
+                    return _INTERNAL_ERROR_;
+                }
+            }
+            //Initialise output values - Rows: 1, Cols: Number of neurons in next layer
+            if(i == numberOfHiddenLayers - 1) { //Last hidden layer connects to output neurons
+                if(matrix_2D_initialise(&(currentHiddenLayer.output), numberOfOutputNeurons, 1, sizeof(float)) == false) {
+                    return _INTERNAL_ERROR_;
+                }
+            } else { //This is really inefficient but makes the code cleaner - consider optimising later
+                if(matrix_2D_initialise(&(currentHiddenLayer.output), hiddenNeuronsPerLayer[i + 1], 1, sizeof(float)) == false) {
+                    return _INTERNAL_ERROR_;
+                }
+            }
+
+
 
             //Initialise biases - Rows: Number of neurons in next layer, Cols: 1
             if(i == numberOfHiddenLayers - 1) { //Last hidden layer connects to output neurons
