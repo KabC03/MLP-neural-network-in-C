@@ -24,11 +24,16 @@ int main(void) {
 
     //Generate a blank image
     BitmapImage testImage;
-    if(bitmap_generate_image_24(&testImage, 255, 0, 0, 100, 100) != _SUCCESS_) {
+    if(bitmap_generate_image_24(&testImage, 0, 0, 255, 10, 10) != _SUCCESS_) {
         printf("Failed to generate\n");
         return -1;
     }
     printf("Image generated\n");
+
+    if(bitmap_colour_pixel(&testImage, 1, 0, 255, 0, 0) != _SUCCESS_) {
+        printf("Failed to colour pixel\n");
+        return -4;
+    }
 
 
     /*
@@ -37,7 +42,10 @@ int main(void) {
         return -3;
     }
     */
-    
+    if(bitmap_draw_line(&testImage, 0, 0, 5, 3, 255, 255, 255, 2) != _SUCCESS_) {
+        printf("Failed to draw line\n");
+        return -3;
+    }
 
     if(bitmap_reconstruct_image(&testImage, "./data/test.bmp") != _SUCCESS_) {
         printf("Failed to reconstruct image\n");
@@ -45,6 +53,9 @@ int main(void) {
     }
     
 
+
+
+    return 0;
 
     Network network;
     size_t neuronsPerHiddenLayer[] = NEURONS_PER_LAYER;

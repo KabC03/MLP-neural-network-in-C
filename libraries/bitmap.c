@@ -219,6 +219,14 @@ RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, ui
         return _INVALID_ARG_PASS_;
     } else {
 
+        //Check for OOB
+        if(x > bitmapImage->bitmapMetadata.imageWidth || y > bitmapImage->bitmapMetadata.imageHeight) {
+            return _SUCCESS_; //Dont fill but still return a success
+        }
+
+
+
+
         uint32_t currentPixelData = 0; //Use 32 bit integer, depth is 24 bits but last 8 bits wont be appended to vector
         //WARNING: Assuming BGR format [B, G, R]
         currentPixelData = blue;
@@ -226,7 +234,6 @@ RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, ui
         currentPixelData += green;
         currentPixelData <<= BITS_PER_BYTE;
         currentPixelData += red;
-
 
         size_t positionToInsert = (bitmapImage->bitmapMetadata.imageWidth * y) + x;
 
@@ -260,37 +267,34 @@ RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, ui
  * Return: bool - T/F depending on if addition was successful
  * 
  */
-RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, size_t x2, size_t y2, uint8_t red, uint8_t green, uint8_t blue, size_t thickness) {
+RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, size_t x2, size_t y2, uint8_t red, uint8_t green, uint8_t blue, int thickness) {
 
-    if(bitmapImage == NULL || thickness == 0) {
+    if(bitmapImage == NULL || thickness <= 0) {
         return _INVALID_ARG_PASS_;
 
     } else {
 
         if(x1 > bitmapImage->bitmapMetadata.imageWidth || x2 > bitmapImage->bitmapMetadata.imageWidth 
         || y1 > bitmapImage->bitmapMetadata.imageHeight || y2 > bitmapImage->bitmapMetadata.imageHeight) { //OOB access
+
             return _INVALID_ARG_PASS_;
         }
 
-
         //Construct a line between two points, evaluate for x1 < x < x2. Then colour pixel(x, floor(f(x)))
-        double gradient = (y1 - y2) / (x1 - x2);
-        double intercept = y1 - (gradient * x1);
+        for(size_t t = x1 - thickness; t < x1 - thickness; t++) {
 
-        for(size_t x = x1; x <= x2; x++) {
+            double gradient = ((y1 - t) - (y2 - t)) / (x1 - x2);
+            double intercept = (y1 - t) - (gradient * (x1 - t));
 
-
-            for(size_t i = x - thickness; i < x + thickness; i++) {
+            for(size_t x = x1; x < x2; x++) {
 
                 //NOTE: bitmap_colour_pixel does not return an error if the pixel is out of range - this is on purpose so the code below works
-                if(bitmap_colour_pixel(bitmapImage, i, floor((i * gradient) + intercept), red, green, blue) != _SUCCESS_) { //Colour the specific pixel
+                if(bitmap_colour_pixel(bitmapImage, x, floor((x * gradient) + intercept), red, green, blue) != _SUCCESS_) { //Colour the specific pixel
+
                     return _INTERNAL_ERROR_;
                 }
             }
-
         }
-
-
 
     }
 
