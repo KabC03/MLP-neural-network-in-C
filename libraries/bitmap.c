@@ -340,7 +340,7 @@ RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage) {
 
         uint8_t grey = 0;
 
-        uint32_t *pixel = 0;
+        uint32_t *pixel = NULL;
 
 
         size_t numberOfPixels = vector_get_length(&(bitmapImage->bitmapData)) + 1;
@@ -356,16 +356,22 @@ RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage) {
 
             for(size_t i = 0; i < numberOfPixels; i++) {
 
+
                 pixel = (uint32_t*)vector_get_index(&(bitmapImage->bitmapData), i);
+
+                uint32_t pixelCopy = 0; 
+                memcpy(&pixelCopy, pixel, BYTES_PER_PIXEL_24); //Have to copy it since otherwise will dereference 8 bits over the end
+
+
                 if(pixel == NULL) {
                     //Unexpected NULL ptr - will make better later
                     return _INTERNAL_ERROR_;
                 }
 
                 //WARNING: assuming BGR format
-                blue = (*pixel) & (0xFF); //255
-                green = ((*pixel) & (0xFF00)) >> 8; //65280 then bitshift down 8 bits
-                red = ((*pixel) & (0xFF0000)) >> 16; //Same thing again
+                blue = pixelCopy & (0xFF); //255
+                green = (pixelCopy & (0xFF00)) >> 8; //65280 then bitshift down 8 bits
+                red = (pixelCopy & (0xFF0000)) >> 16; //Same thing again
 
 
                 //Set greyscale
@@ -379,6 +385,7 @@ RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage) {
                 //printf("Blue: %d, Green: %d, Red: %d, Grey: %d\n", blue, green, red, newPixel);
 
                 //Set new greyscale pixel
+
                 if(vector_set_index(&(bitmapImage->bitmapData), i, &newPixel) == false) {
                     return _INTERNAL_ERROR_;
                 }

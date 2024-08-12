@@ -336,6 +336,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
 
 
+
         //Assign to new matrix
         if(matrix_2D_initialise(&inputToInputLayer, vector_get_length(input) + 1, 1, sizeof(float)) == false) {
             return _INTERNAL_ERROR_;
@@ -347,6 +348,13 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
             return _INTERNAL_ERROR_;
         }
 
+        /*
+        printf("Rows: %zu, Cols: %zu\n",inputToInputLayer.rows, inputToInputLayer.cols);
+        if(matrix_2D_print(&inputToInputLayer) == false) {
+            return _INTERNAL_ERROR_;
+        }
+        printf("\n");
+        */
 
         Matrix *inputToLayer = &inputToInputLayer;
         size_t numberOfLayers = vector_get_length(&(network->networkLayers));

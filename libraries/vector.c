@@ -335,7 +335,6 @@ bool vector_set_index(Vector *const vector, size_t index, const void *const data
             memcpy(&((vector->data)[index * vector->elementSize]),data, vector->elementSize);
         }
     }
-
     return true;
 }
 

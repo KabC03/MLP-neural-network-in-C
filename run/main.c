@@ -52,17 +52,19 @@ int main(void) {
         return -3;
     }
     
+
+
+    if(bitmap_greyscale(&testImage) != _SUCCESS_) {
+        printf("Failed to greyscale image\n");
+        return -1;
+    }
+
     if(bitmap_reconstruct_image(&testImage, "./data/test.bmp") != _SUCCESS_) {
         printf("Failed to reconstruct image\n");
         return -2;
     }
 
-    /*
-    if(bitmap_greyscale(&testImage) != _SUCCESS_) {
-        printf("Failed to greyscale image\n");
-        return -1;
-    }
-    */
+    
 
     Network network;
     size_t neuronsPerHiddenLayer[] = NEURONS_PER_LAYER;
