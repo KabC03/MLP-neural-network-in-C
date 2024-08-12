@@ -287,12 +287,12 @@ RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, siz
         //printf("%ld, %ld, %d\n", x1 - thickness, x1 + thickness, (int)(x1 - thickness) < (int)(x1 + thickness));
 
         bool overflowProtection = true;
-        for(long int t = x1 - thickness; t < x1 + thickness || overflowProtection == true; t++) {
+        for(size_t t = x1 - thickness; t < x1 + thickness || overflowProtection == true; t++) {
 
             double gradient = ((y1 - t) - (y2 - t)) / (x1 - x2);
             double intercept = (y1 - t) - (gradient * (x1 - t));
 
-            for(long int x = x1; x < x2; x++) {
+            for(size_t = x1; x < x2; x++) {
 
                 //NOTE: bitmap_colour_pixel does not return an error if the pixel is out of range - this is on purpose so the code below works
                 if(bitmap_colour_pixel(bitmapImage, x, floor((x * gradient) + intercept), red, green, blue) != _SUCCESS_) { //Colour the specific pixel
