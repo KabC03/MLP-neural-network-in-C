@@ -171,7 +171,7 @@ RETURN_CODE bitmap_generate_image_24(BitmapImage *outputImage, uint8_t red, uint
         outputImage->bitmapMetadata.imageWidth = xRes;
         outputImage->bitmapMetadata.importantColours = 0;
         outputImage->bitmapMetadata.numberOfColours = 0;
-        outputImage->bitmapMetadata.numberOfPlanes = 0;
+        outputImage->bitmapMetadata.numberOfPlanes = 1;
         outputImage->bitmapMetadata.xRes = 0;
         outputImage->bitmapMetadata.yRes = 0;
 
