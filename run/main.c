@@ -8,7 +8,8 @@
 #include <string.h>
 #define FILE_BUFFER_SIZE 100
 #define NUM_LAYERS 3
-#define NEURONS_PER_LAYER {testImage.bitmapMetadata.imageHeight * testImage.bitmapMetadata.imageWidth, 2, 2, 2}
+#define BYTES_PER_PIXEL 3
+#define NEURONS_PER_LAYER {((testImage.bitmapMetadata.imageHeight * testImage.bitmapMetadata.imageWidth)), 2, 3, 3}
 //#define NEURONS_PER_LAYER {20, 100, 2, 2} /*NOTE: last 2 numbers MUST be the same to properly initilise the network*/
 
 #define TRAIN_FLAG "-t"
@@ -29,7 +30,7 @@ int main(void) {
         printf("Failed to generate\n");
         return -1;
     }
-
+    
 
     
     //Smiley face
@@ -56,6 +57,12 @@ int main(void) {
         return -2;
     }
 
+    /*
+    if(bitmap_greyscale(&testImage) != _SUCCESS_) {
+        printf("Failed to greyscale image\n");
+        return -1;
+    }
+    */
 
     Network network;
     size_t neuronsPerHiddenLayer[] = NEURONS_PER_LAYER;
@@ -65,16 +72,18 @@ int main(void) {
         return -1;
     }
 
+
     if(MLP_evaluate_input(&network, &(testImage.bitmapData)) != _SUCCESS_) {
         printf("Failed to run network\n");
         return -1;
     }
 
+
+    printf("Printing network output:\n");
     if(MLP_print_output(&network) != _SUCCESS_) {
         printf("Failed to print output layer\n");
         return -1;
     }
-
 
     return 0;
 }

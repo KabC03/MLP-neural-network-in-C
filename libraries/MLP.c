@@ -4,7 +4,7 @@
 #define square(value) (value * value)
 #define HERE printf("HERE\n");
 #define BYTE_SIZE 255
-
+#define BYTES_PER_PIXEL 3
 #define MLP_activate(arg1, result) MLP_ReLu(arg1, result)
 
 
@@ -320,7 +320,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
         }
         //Convert uint8 to float
         for(size_t i = 0; i < vector_get_length(input) + 1; i++) {
-            const uint8_t *currentInt = vector_get_index(input, i);
+            const uint8_t *currentInt = vector_get_index(input, i); //Get the bottom 8 bits
 
             if(currentInt == NULL) {
                 return _INTERNAL_ERROR_;
@@ -343,10 +343,10 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
         if(MLP_normalise(&inputToInputLayer, BYTE_SIZE) == false) {
             return _INTERNAL_ERROR_;
         }
-        if(matrix_2D_set(&inputToInputLayer, vector_get_length(input) + 1, 1, inputAsFloat.data, sizeof(float)) == false) {
+        if(matrix_2D_set(&inputToInputLayer, vector_get_length(&inputAsFloat) + 1, 1, inputAsFloat.data, sizeof(float)) == false) {
             return _INTERNAL_ERROR_;
         }
-        
+
 
         Matrix *inputToLayer = &inputToInputLayer;
         size_t numberOfLayers = vector_get_length(&(network->networkLayers));
@@ -372,6 +372,16 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
             //input = output;
             inputToLayer = &(currentLayer->output);
+
+
+
+            /*
+            printf("Layer: %zu\n",i);
+            if(matrix_2D_print(&(currentLayer->output)) == false) {
+                return _INTERNAL_ERROR_;
+            }
+            printf("\n");
+            */
         }
 
 
