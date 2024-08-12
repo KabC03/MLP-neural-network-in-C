@@ -30,7 +30,7 @@ int main(void) {
     }
 
 
-    if(bitmap_draw_line(&testImage, 1, 1, 9, 9, 255, 255, 255, 1) != _SUCCESS_) {
+    if(bitmap_draw_line(&testImage, 0, 9, 9, 0, 255, 255, 255, 0) != _SUCCESS_) {
         printf("Failed to draw line\n");
         return -3;
     }
