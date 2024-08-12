@@ -82,6 +82,11 @@ RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput)
         }
 
 
+
+        if(vector_resize(&(bitmapImageOutput->bitmapData), numberOfPixelsInCol * numberOfPixelsInRow) == false) {
+            return _INTERNAL_ERROR_;
+        }
+
         for(size_t i = 0; i < numberOfPixelsInCol; i++) {
 
             //Read all pixels
@@ -188,6 +193,115 @@ RETURN_CODE bitmap_generate_image_24(BitmapImage *outputImage, uint8_t red, uint
 
     return _SUCCESS_;
 }
+
+
+
+
+
+/**
+ * bitmap_draw_line
+ * ===============================================
+ * Brief: Colour a specific pixel - NOTE does not return an error if a pixel is out of range, just ignores it
+ * 
+ * Param: *bitmapImage - Enstantiated bitmap of interest 
+ *        x - x position
+ *        y - y position
+ *        red - red value of pixel
+ *        green - green value of pixel
+ *        blue - blue value of pixel
+ * 
+ * Return: bool - T/F depending on if addition was successful
+ * 
+ */
+RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, uint8_t red, uint8_t green, uint8_t blue) {
+
+    if(bitmapImage == NULL) {
+        return _INVALID_ARG_PASS_;
+    } else {
+
+        uint32_t currentPixelData = 0; //Use 32 bit integer, depth is 24 bits but last 8 bits wont be appended to vector
+        //WARNING: Assuming BGR format [B, G, R]
+        currentPixelData = blue;
+        currentPixelData <<= BITS_PER_BYTE;
+        currentPixelData += green;
+        currentPixelData <<= BITS_PER_BYTE;
+        currentPixelData += red;
+
+
+        size_t positionToInsert = (bitmapImage->bitmapMetadata.imageWidth * y) + x;
+
+        if(vector_set_index(&(bitmapImage->bitmapData), positionToInsert, &currentPixelData) == false) {
+            return _INTERNAL_ERROR_;
+        }
+
+    }
+
+    return _SUCCESS_;
+}
+
+
+
+
+/**
+ * bitmap_draw_line
+ * ===============================================
+ * Brief: Draw a line between two coordinates on an image
+ * 
+ * Param: *bitmapImage - Enstantiated bitmap of interest 
+ *        x1 - First x position
+ *        y1 - First y position
+ *        x2 - Second x position
+ *        y2 - Second y position
+ *        red - red value of line
+ *        green - green value of line
+ *        blue - blue value of line
+ *        thickness - line thickness
+ * 
+ * Return: bool - T/F depending on if addition was successful
+ * 
+ */
+RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, size_t x2, size_t y2, uint8_t red, uint8_t green, uint8_t blue, size_t thickness) {
+
+    if(bitmapImage == NULL || thickness == 0) {
+        return _INVALID_ARG_PASS_;
+
+    } else {
+
+        if(x1 > bitmapImage->bitmapMetadata.imageWidth || x2 > bitmapImage->bitmapMetadata.imageWidth 
+        || y1 > bitmapImage->bitmapMetadata.imageHeight || y2 > bitmapImage->bitmapMetadata.imageHeight) { //OOB access
+            return _INVALID_ARG_PASS_;
+        }
+
+
+        //Construct a line between two points, evaluate for x1 < x < x2. Then colour pixel(x, floor(f(x)))
+        double gradient = (y1 - y2) / (x1 - x2);
+        double intercept = y1 - (gradient * x1);
+
+        for(size_t x = x1; x <= x2; x++) {
+
+
+            for(size_t i = x - thickness; i < x + thickness; i++) {
+
+                //NOTE: bitmap_colour_pixel does not return an error if the pixel is out of range - this is on purpose so the code below works
+                if(bitmap_colour_pixel(bitmapImage, i, floor((i * gradient) + intercept), red, green, blue) != _SUCCESS_) { //Colour the specific pixel
+                    return _INTERNAL_ERROR_;
+                }
+            }
+
+        }
+
+
+
+    }
+
+
+    return _SUCCESS_;
+}
+
+
+
+
+
 
 
 

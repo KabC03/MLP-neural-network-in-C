@@ -22,34 +22,28 @@ int main(void) {
     //srand(time(NULL)); //Use default seed of 1
 
 
+    //Generate a blank image
     BitmapImage testImage;
-    if(bitmap_generate_image_24(&testImage, 255, 0, 0, 1000, 1000) != _SUCCESS_) {
+    if(bitmap_generate_image_24(&testImage, 255, 0, 0, 100, 100) != _SUCCESS_) {
         printf("Failed to generate\n");
         return -1;
     }
     printf("Image generated\n");
+
+
     /*
     if(bitmap_greyscale(&testImage) != _SUCCESS_) {
         printf("Failed to greyscale\n");
         return -3;
     }
     */
+    
+
     if(bitmap_reconstruct_image(&testImage, "./data/test.bmp") != _SUCCESS_) {
         printf("Failed to reconstruct image\n");
         return -2;
     }
-
-    return 0;
-
-
-
-    BitmapImage inputImage;
-
-
-    if(bitmap_enstantiate("../data/test_image", &inputImage) == false) {
-        printf("Failed to open bitmap\n");
-        return -1;
-    }
+    
 
 
     Network network;
@@ -60,7 +54,7 @@ int main(void) {
         return -1;
     }
 
-    if(MLP_evaluate_input(&network, &(inputImage.bitmapData)) != _SUCCESS_) {
+    if(MLP_evaluate_input(&network, &(testImage.bitmapData)) != _SUCCESS_) {
         printf("Failed to run network\n");
         return -1;
     }

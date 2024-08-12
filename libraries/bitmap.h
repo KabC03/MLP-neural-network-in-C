@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdint.h>
+#include <math.h>
 #include "vector.h" 
 #include "return codes.h"
 
@@ -55,6 +56,8 @@ typedef struct BitmapImage {
 
 RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput);
 RETURN_CODE bitmap_generate_image_24(BitmapImage *outputImage, uint8_t red, uint8_t green, uint8_t blue, size_t xRes, size_t yRes);
+RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, uint8_t red, uint8_t green, uint8_t blue);
+RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, size_t x2, size_t y2, uint8_t red, uint8_t green, uint8_t blue, size_t thickness);
 RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage);
 RETURN_CODE bitmap_reconstruct_image(BitmapImage *bitmapImage, char *imageName);
 RETURN_CODE bitmap_destroy(BitmapImage *bitmapImage);
