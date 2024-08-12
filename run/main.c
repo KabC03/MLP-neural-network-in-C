@@ -28,6 +28,12 @@ int main(void) {
         return -1;
     }
     printf("Image generated\n");
+    /*
+    if(bitmap_greyscale(&testImage) != _SUCCESS_) {
+        printf("Failed to greyscale\n");
+        return -3;
+    }
+    */
     if(bitmap_reconstruct_image(&testImage, "./data/test.bmp") != _SUCCESS_) {
         printf("Failed to reconstruct image\n");
         return -2;

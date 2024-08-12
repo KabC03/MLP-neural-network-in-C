@@ -166,7 +166,7 @@ RETURN_CODE bitmap_generate_image_24(BitmapImage *outputImage, uint8_t red, uint
         outputImage->bitmapMetadata.bitsPerPixel = BIT_24_DEPTH; //24 bit depth
         outputImage->bitmapMetadata.compressionType = 0;
         outputImage->bitmapMetadata.headerSize = BITMAP_HEADER_SIZE;
-        outputImage->bitmapMetadata.imageFileSize = (xRes + paddingPerRow) * yRes * BYTES_PER_PIXEL_24;
+        outputImage->bitmapMetadata.imageFileSize = (xRes * BYTES_PER_PIXEL_24 + paddingPerRow) * yRes;
         outputImage->bitmapMetadata.imageHeight = yRes;
         outputImage->bitmapMetadata.imageWidth = xRes;
         outputImage->bitmapMetadata.importantColours = 0;
