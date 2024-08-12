@@ -383,13 +383,13 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
 
 
-            /*
+            
             printf("Layer: %zu\n",i);
             if(matrix_2D_print(&(currentLayer->output)) == false) {
                 return _INTERNAL_ERROR_;
             }
             printf("\n");
-            */
+            
         }
 
 
