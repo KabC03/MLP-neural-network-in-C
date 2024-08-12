@@ -326,8 +326,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
                 return _INTERNAL_ERROR_;
             }
 
-            uint8_t current = *currentInt; //Make a copy on the stacak
-            current = (float)(current); //Convert to float
+            float current = (float)(*currentInt); //Have to do it in one line otherwise a buffer overflow occurs
 
             if(vector_quick_append(&inputAsFloat, &(current), 1) == false) {
                 return _INTERNAL_ERROR_;
@@ -350,7 +349,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
         
 
         Matrix *inputToLayer = &inputToInputLayer;
-        size_t numberOfLayers = vector_get_length(input);
+        size_t numberOfLayers = vector_get_length(&(network->networkLayers));
         for(size_t i = 0; i < numberOfLayers; i++) {
 
             NetworkLayer *currentLayer = (NetworkLayer*)vector_get_index(&(network->networkLayers), i);
@@ -359,18 +358,18 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
             }
 
             //preActivatedOutput = [weights]*[input] + [bias]; //STORE THIS
-            if(matrix_2D_multiply(&(currentLayer->preActivationOutput), &(currentLayer->weight), inputToLayer) == false) {
+            if(matrix_2D_multiply(&(currentLayer->preActivationOutput), &(currentLayer->weight), inputToLayer) == false) { //ISSUE HERE
                 return _INTERNAL_ERROR_;
             }
             if(matrix_2D_add(&(currentLayer->preActivationOutput), &(currentLayer->preActivationOutput), &(currentLayer->bias)) == false) {
                 return _INTERNAL_ERROR_;
             }
-            
+
             //output = act(preActivatedOutput); //STORE THIS
             if(MLP_activate(&(currentLayer->preActivationOutput), &(currentLayer->output)) == false) {
                 return _INTERNAL_ERROR_;
             }
-            
+
             //input = output;
             inputToLayer = &(currentLayer->output);
         }
@@ -381,6 +380,38 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
     return _SUCCESS_;
 }
+
+
+
+
+
+/**
+ * MLP_print_output
+ * ===============================================
+ * Brief: Print the output matrix at the output layer
+ * 
+ * Param: *network - Network of interest
+ *        
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+RETURN_CODE MLP_print_output(Network *network) {
+
+    if(network == NULL) {
+        return _INVALID_ARG_PASS_;
+
+    } else {
+
+        NetworkLayer *outputLayer = (NetworkLayer*)vector_get_index(&(network->networkLayers), vector_get_length(&(network->networkLayers)));
+
+        if(matrix_2D_print(&(outputLayer->output)) == false) {
+            return _INTERNAL_ERROR_;
+        }
+    }
+
+    return _SUCCESS_;
+}
+
 
 
 

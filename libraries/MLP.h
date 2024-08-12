@@ -36,7 +36,7 @@ bool MLP_ReLu_gradient(Matrix *const arg1, Matrix *const result);
 
 RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfLayers, size_t *neuronsPerLayer);
 RETURN_CODE MLP_evaluate_input(Network *network, Vector *input);
-
+RETURN_CODE MLP_print_output(Network *network);
 
 #endif // MLP_H
 

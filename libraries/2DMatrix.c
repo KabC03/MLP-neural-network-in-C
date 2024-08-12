@@ -6,7 +6,7 @@
 /**
  * matrix_2D_print
  * ===============================================
- * Brief: Print a 2D matrix of integers (used for debugging)
+ * Brief: Print a 2D matrix of floats (used for debugging)
  * 
  * Param: *matrix - matrix of interest
  * Return: bool - T/F depending on if initialisation was successful
@@ -21,7 +21,7 @@ bool matrix_2D_print(Matrix *const matrix) {
         for(size_t i = 0; i < matrix->rows; i++) {
             for(size_t j = 0; j < matrix->cols; j++) {
 
-                printf("%d ", (matrix->data)[(matrix->dataSize) * ((i * matrix->cols) + j)]);
+                printf("%f ", (float)((matrix->data)[(matrix->dataSize) * ((i * matrix->cols) + j)]));
             }
             printf("\n");
         }
@@ -220,7 +220,12 @@ bool matrix_2D_multiply(Matrix *const result, Matrix *const arg1, Matrix *const 
     || result->cols != arg2->cols
     || arg1->dataSize != arg2->dataSize
     || arg1->dataSize != result->dataSize) { //Incompatable dimensions
+
+        //printf("arg1: %zu, arg2: %zu, result: %zu\n", arg1->dataSize, arg2->dataSize, result->dataSize);
+        //printf("arg1: rows: %zu, cols: %zu, arg2: rows: %zu, cols: %zu\n",arg1->rows, arg1->cols, arg2->rows, arg2->cols);
+        //printf("output: rows: %zu, cols: %zu\n",result->rows, result->cols);
         return false;
+
     } else {
 
 
