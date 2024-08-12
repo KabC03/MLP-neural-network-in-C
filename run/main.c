@@ -24,17 +24,18 @@ int main(void) {
 
     //Generate a blank image
     BitmapImage testImage;
-    if(bitmap_generate_image_24(&testImage, 0, 100, 255, 10, 10) != _SUCCESS_) {
+    if(bitmap_generate_image_24(&testImage, 255, 0, 0, 10, 10) != _SUCCESS_) {
         printf("Failed to generate\n");
         return -1;
     }
-
-
     if(bitmap_draw_line(&testImage, 0, 9, 9, 0, 255, 255, 255, 0) != _SUCCESS_) {
         printf("Failed to draw line\n");
         return -3;
     }
-
+    if(bitmap_draw_line(&testImage, 0, 0, 9, 9, 255, 255, 255, 0) != _SUCCESS_) {
+        printf("Failed to draw line\n");
+        return -3;
+    }
 
     /*
     //Smiley face
