@@ -281,7 +281,13 @@ RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, siz
         }
 
         //Construct a line between two points, evaluate for x1 < x < x2. Then colour pixel(x, floor(f(x)))
-        for(long int t = x1 - thickness; t < x1 - thickness; t++) {
+
+
+
+        //printf("%ld, %ld, %d\n", x1 - thickness, x1 + thickness, (int)(x1 - thickness) < (int)(x1 + thickness));
+
+        bool overflowProtection = true;
+        for(long int t = x1 - thickness; t < x1 + thickness || overflowProtection == true; t++) {
 
             double gradient = ((y1 - t) - (y2 - t)) / (x1 - x2);
             double intercept = (y1 - t) - (gradient * (x1 - t));
@@ -293,6 +299,10 @@ RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, siz
 
                     return _INTERNAL_ERROR_;
                 }
+            }
+
+            if(t == 0) {
+                overflowProtection = false;
             }
         }
 
