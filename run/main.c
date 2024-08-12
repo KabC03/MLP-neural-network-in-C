@@ -42,7 +42,7 @@ int main(void) {
         return -3;
     }
     */
-    if(bitmap_draw_line(&testImage, 0, 0, 5, 3, 255, 255, 255, 1) != _SUCCESS_) {
+    if(bitmap_draw_line(&testImage, 0, 0, 5, 3, 255, 255, 255, 0) != _SUCCESS_) {
         printf("Failed to draw line\n");
         return -3;
     }

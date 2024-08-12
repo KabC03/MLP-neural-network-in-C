@@ -269,7 +269,7 @@ RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, ui
  */
 RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, size_t x2, size_t y2, uint8_t red, uint8_t green, uint8_t blue, int thickness) {
 
-    if(bitmapImage == NULL || thickness <= 0) {
+    if(bitmapImage == NULL || thickness < 0) {
         return _INVALID_ARG_PASS_;
 
     } else {
@@ -289,8 +289,8 @@ RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, siz
         bool overflowProtection = true;
         for(size_t t = x1 - thickness; t < x1 + thickness || overflowProtection == true; t++) {
 
-            double gradient = ((y1 - t) - (y2 - t)) / (x1 - x2); //Gradient is the same after shift (note t cancels)
-            double intercept = (y1 - t) - (gradient * (x1));
+            double gradient = (((double)y1 - (double)y2)) / (((double)x1 - (double)x2)); //Gradient is the same after shift (note t cancels)
+            double intercept = ((double)y1 - t) - (gradient * (x1));
 
             for(size_t x = x1; x < x2; x++) {
 
