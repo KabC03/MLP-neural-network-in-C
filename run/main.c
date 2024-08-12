@@ -30,7 +30,6 @@ int main(void) {
     }
 
     
-    /*
     //Smiley face
     if(bitmap_colour_pixel(&testImage, 3, 7, 255, 255, 0) != _SUCCESS_) {
         printf("Failed to colour pixel\n");
@@ -41,19 +40,14 @@ int main(void) {
     return -4;
     }
 
-    if(bitmap_draw_line(&testImage, 1, 4, 7, 3, 255, 255, 255, 1) != _SUCCESS_) {
+    if(bitmap_draw_line(&testImage, 1, 3, 7, 2, 255, 255, 255, 1) != _SUCCESS_) {
         printf("Failed to draw line\n");
         return -3;
     }
-    */
-
-
-    //Buggy
-    if(bitmap_draw_line(&testImage, 5, 5, 6, 10, 255, 0, 255, 1) != _SUCCESS_) {
+    if(bitmap_draw_line(&testImage, 5, 2, 7, 3, 255, 255, 255, 1) != _SUCCESS_) {
         printf("Failed to draw line\n");
         return -3;
     }
-    
 
     
 
