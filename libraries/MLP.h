@@ -26,6 +26,7 @@ typedef struct Network {
 
 
 bool MLP_randomise(Matrix *const matrix, float range, float min);
+bool MLP_normalise(Matrix *const matrix, float value);
 bool MLP_mean_square_error(Matrix *const matrix, float expectedValue ,float *output);
 
 bool MLP_ReLu(Matrix *const arg1, Matrix *const result);

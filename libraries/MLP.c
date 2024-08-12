@@ -5,6 +5,9 @@
 #define HERE printf("HERE\n");
 #define BYTE_SIZE 255
 
+#define MLP_activate(arg1, result) MLP_ReLu(arg1, result)
+
+
 
 //Data for the hidden layer
 typedef struct NetworkLayer {
@@ -45,7 +48,33 @@ bool MLP_randomise(Matrix *const matrix, float range, float min) {
     return true;
 }
 
+/**
+ * MLP_normalise
+ * ===============================================
+ * Brief: Normalise a matrix by a value
+ * 
+ * Param: *matrix - matrix of interest
+ *        value - value to normalise to
+ * 
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+bool MLP_normalise(Matrix *const matrix, float value) {
 
+    if(matrix == NULL) {
+        return false;
+    } else if(matrix->data == NULL) {
+        return false;
+    } else {
+
+
+        for(size_t i = 0; i < (matrix->cols * matrix->rows); i++) {
+            matrix->data[(matrix->dataSize) * i] /= value;
+        }
+
+    }
+    return true;
+}
 
 
 /**
@@ -254,10 +283,14 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfLayers, size
  */
 RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
-    if(network == NULL) {
+    if(network == NULL || input == NULL) {
         return _INVALID_ARG_PASS_;
 
     } else {
+
+        if(vector_get_length(input) == -1 || vector_get_length(input) == 0) {
+            return _INVALID_ARG_PASS_;
+        }
 
 
         //Input data to network
@@ -278,6 +311,71 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
         input = output;
 
         */
+
+       //This is VERY inefficient - should optimise it later
+        Matrix inputToInputLayer;
+        Vector inputAsFloat;
+        if(vector_initialise(&inputAsFloat, sizeof(uint8_t)) == false) {
+            return _INTERNAL_ERROR_;
+        }
+        //Convert uint8 to float
+        for(size_t i = 0; i < vector_get_length(input) + 1; i++) {
+            const uint8_t *currentInt = vector_get_index(input, i);
+
+            if(currentInt == NULL) {
+                return _INTERNAL_ERROR_;
+            }
+
+            uint8_t current = *currentInt; //Make a copy on the stacak
+            current = (float)(current); //Convert to float
+
+            if(vector_quick_append(&inputAsFloat, &(current), 1) == false) {
+                return _INTERNAL_ERROR_;
+            }
+        }
+
+
+
+
+        //Assign to new matrix
+        if(matrix_2D_initialise(&inputToInputLayer, vector_get_length(input) + 1, 1, sizeof(float)) == false) {
+            return _INTERNAL_ERROR_;
+        }
+        if(MLP_normalise(&inputToInputLayer, BYTE_SIZE) == false) {
+            return _INTERNAL_ERROR_;
+        }
+        if(matrix_2D_set(&inputToInputLayer, vector_get_length(input) + 1, 1, inputAsFloat.data, sizeof(float)) == false) {
+            return _INTERNAL_ERROR_;
+        }
+        
+
+        Matrix *inputToLayer = &inputToInputLayer;
+        size_t numberOfLayers = vector_get_length(input);
+        for(size_t i = 0; i < numberOfLayers; i++) {
+
+            NetworkLayer *currentLayer = (NetworkLayer*)vector_get_index(&(network->networkLayers), i);
+            if(currentLayer == NULL) {
+                return _INTERNAL_ERROR_;
+            }
+
+            //preActivatedOutput = [weights]*[input] + [bias]; //STORE THIS
+            if(matrix_2D_multiply(&(currentLayer->preActivationOutput), &(currentLayer->weight), inputToLayer) == false) {
+                return _INTERNAL_ERROR_;
+            }
+            if(matrix_2D_add(&(currentLayer->preActivationOutput), &(currentLayer->preActivationOutput), &(currentLayer->bias)) == false) {
+                return _INTERNAL_ERROR_;
+            }
+            
+            //output = act(preActivatedOutput); //STORE THIS
+            if(MLP_activate(&(currentLayer->preActivationOutput), &(currentLayer->output)) == false) {
+                return _INTERNAL_ERROR_;
+            }
+            
+            //input = output;
+            inputToLayer = &(currentLayer->output);
+        }
+
+
 
     }
 
