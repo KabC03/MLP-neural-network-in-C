@@ -30,7 +30,7 @@ int main(void) {
     }
     printf("Image generated\n");
 
-    if(bitmap_colour_pixel(&testImage, 1, 0, 255, 0, 0) != _SUCCESS_) {
+    if(bitmap_colour_pixel(&testImage, 1, 1, 255, 0, 0) != _SUCCESS_) {
         printf("Failed to colour pixel\n");
         return -4;
     }
