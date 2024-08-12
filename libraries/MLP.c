@@ -322,39 +322,38 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
         for(size_t i = 0; i < vector_get_length(input) + 1; i++) {
             const uint8_t *currentInt = vector_get_index(input, i); //Get the bottom 8 bits
 
+
+
             if(currentInt == NULL) {
                 return _INTERNAL_ERROR_;
             }
 
             float current = (float)(*currentInt); //Have to do it in one line otherwise a buffer overflow occurs
-
+            //printf("Int: %f\n", current);
             if(vector_quick_append(&inputAsFloat, &(current), 1) == false) {
                 return _INTERNAL_ERROR_;
             }
         }
 
-
-
-
-
         //Assign to new matrix
         if(matrix_2D_initialise(&inputToInputLayer, vector_get_length(input) + 1, 1, sizeof(float)) == false) {
-            return _INTERNAL_ERROR_;
-        }
-        if(MLP_normalise(&inputToInputLayer, BYTE_SIZE) == false) {
             return _INTERNAL_ERROR_;
         }
         if(matrix_2D_set(&inputToInputLayer, vector_get_length(&inputAsFloat) + 1, 1, inputAsFloat.data, sizeof(float)) == false) {
             return _INTERNAL_ERROR_;
         }
-
-        /*
+        
         printf("Rows: %zu, Cols: %zu\n",inputToInputLayer.rows, inputToInputLayer.cols);
         if(matrix_2D_print(&inputToInputLayer) == false) {
             return _INTERNAL_ERROR_;
         }
         printf("\n");
-        */
+        
+        
+        if(MLP_normalise(&inputToInputLayer, BYTE_SIZE) == false) {
+            return _INTERNAL_ERROR_;
+        }
+
 
         Matrix *inputToLayer = &inputToInputLayer;
         size_t numberOfLayers = vector_get_length(&(network->networkLayers));
@@ -383,13 +382,13 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
 
 
-            
+            /*
             printf("Layer: %zu\n",i);
             if(matrix_2D_print(&(currentLayer->output)) == false) {
                 return _INTERNAL_ERROR_;
             }
             printf("\n");
-            
+            */
         }
 
 

@@ -21,7 +21,7 @@ bool matrix_2D_print(Matrix *const matrix) {
         for(size_t i = 0; i < matrix->rows; i++) {
             for(size_t j = 0; j < matrix->cols; j++) {
 
-                printf("%f ", (float)((matrix->data)[(matrix->dataSize) * ((i * matrix->cols) + j)]));
+                printf("%f ", *(float*)&((matrix->data)[(matrix->dataSize) * ((i * matrix->cols) + j)]));
             }
             printf("\n");
         }
