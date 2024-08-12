@@ -69,7 +69,7 @@ bool MLP_normalise(Matrix *const matrix, float value) {
 
 
         for(size_t i = 0; i < (matrix->cols * matrix->rows); i++) {
-            matrix->data[(matrix->dataSize) * i] /= value;
+            *(float*)(&((matrix->data[(matrix->dataSize) * i]))) /= value;
         }
 
     }
@@ -355,6 +355,14 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
             return _INTERNAL_ERROR_;
         }
 
+        /*
+        printf("NORM || Rows: %zu, Cols: %zu\n",inputToInputLayer.rows, inputToInputLayer.cols);
+        if(matrix_2D_print(&inputToInputLayer) == false) {
+            return _INTERNAL_ERROR_;
+        }
+        printf("\n");
+        */
+
 
         Matrix *inputToLayer = &inputToInputLayer;
         size_t numberOfLayers = vector_get_length(&(network->networkLayers));
@@ -370,12 +378,13 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
                 return _INTERNAL_ERROR_;
             }
             
+            /*
             printf("Preactivation: %zu\n",i);
             if(matrix_2D_print(&(currentLayer->preActivationOutput)) == false) {
                 return _INTERNAL_ERROR_;
             }
             printf("\n");
-            
+            */
 
 
             if(matrix_2D_add(&(currentLayer->preActivationOutput), &(currentLayer->preActivationOutput), &(currentLayer->bias)) == false) {
