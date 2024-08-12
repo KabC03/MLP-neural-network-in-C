@@ -23,7 +23,7 @@ int main(void) {
 
 
     BitmapImage testImage;
-    if(bitmap_generate_image_24(&testImage, 255, 0, 0, 1000, 100) != _SUCCESS_) {
+    if(bitmap_generate_image_24(&testImage, 255, 0, 0, 1000, 1000) != _SUCCESS_) {
         printf("Failed to generate\n");
         return -1;
     }

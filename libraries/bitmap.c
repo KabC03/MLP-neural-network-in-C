@@ -142,6 +142,9 @@ RETURN_CODE bitmap_generate_image_24(BitmapImage *outputImage, uint8_t red, uint
             return _INTERNAL_ERROR_;
         }
 
+        if(vector_resize(&(outputImage->bitmapData), xRes * yRes) == false) { //Reserve memory upfront - much faster
+            return _INTERNAL_ERROR_;
+        }
 
         //Set image colour
         for(size_t i = 0; i < xRes * yRes; i++) { //For pixel in image
@@ -158,6 +161,7 @@ RETURN_CODE bitmap_generate_image_24(BitmapImage *outputImage, uint8_t red, uint
             if(vector_quick_append(&(outputImage->bitmapData), &currentPixelData, 1) == false) {
                 return _INTERNAL_ERROR_;
             }
+
         }
 
 
