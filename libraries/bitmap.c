@@ -280,17 +280,21 @@ RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, siz
             return _INVALID_ARG_PASS_;
         }
 
-        //Construct a line between two points, evaluate for x1 < x < x2. Then colour pixel(x, floor(f(x)))
 
-
+        //Convert to double
+        //Didnt accept doubles since - only unsigned integers should be passed (they are discrete coordinates)
+        double y1Double = (double)y1;
+        double y2Double = (double)y2;
+        double x1Double = (double)x1;
+        double x2Double = (double)x2;
 
         //printf("%ld, %ld, %d\n", x1 - thickness, x1 + thickness, (int)(x1 - thickness) < (int)(x1 + thickness));
-
+        //Construct a line between two points, evaluate for x1 < x < x2. Then colour pixel(x, floor(f(x)))
         bool overflowProtection = true;
         for(size_t t = x1 - thickness; t < x1 + thickness || overflowProtection == true; t++) {
 
-            double gradient = (((double)y1 - (double)y2)) / (((double)x1 - (double)x2)); //Gradient is the same after shift (note t cancels)
-            double intercept = ((double)y1 - t) - (gradient * (x1));
+            double gradient = ((y1Double - y2Double)) / ((x1Double - x2Double)); //Gradient is the same after shift (note t cancels)
+            double intercept = (y1Double - t) - (gradient * (x1));
 
             for(size_t x = x1; x < x2; x++) {
 
