@@ -22,7 +22,24 @@ int main(void) {
     //srand(time(NULL)); //Use default seed of 1
 
 
+    BitmapImage testImage;
+    if(bitmap_generate_image_24(&testImage, 255, 0, 0, 100, 100) != _SUCCESS_) {
+        printf("Failed to generate\n");
+        return -1;
+    }
+    printf("Image generated\n");
+    if(bitmap_reconstruct_image(&testImage, "./data/test.bmp") != _SUCCESS_) {
+        printf("Failed to reconstruct image\n");
+        return -2;
+    }
+
+    return 0;
+
+
+
     BitmapImage inputImage;
+
+
     if(bitmap_enstantiate("../data/test_image", &inputImage) == false) {
         printf("Failed to open bitmap\n");
         return -1;
