@@ -29,6 +29,7 @@ int main(void) {
         return -1;
     }
 
+    
     /*
     //Smiley face
     if(bitmap_colour_pixel(&testImage, 3, 7, 255, 255, 0) != _SUCCESS_) {
@@ -47,16 +48,12 @@ int main(void) {
     */
 
 
-
-
-
-    /*
     //Buggy
     if(bitmap_draw_line(&testImage, 5, 5, 6, 10, 255, 0, 255, 1) != _SUCCESS_) {
         printf("Failed to draw line\n");
         return -3;
     }
-    */
+    
 
     
 
