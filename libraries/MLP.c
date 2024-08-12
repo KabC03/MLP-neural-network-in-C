@@ -315,7 +315,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
        //This is VERY inefficient - should optimise it later
         Matrix inputToInputLayer;
         Vector inputAsFloat;
-        if(vector_initialise(&inputAsFloat, sizeof(uint8_t)) == false) {
+        if(vector_initialise(&inputAsFloat, sizeof(float)) == false) {
             return _INTERNAL_ERROR_;
         }
         //Convert uint8 to float
