@@ -24,28 +24,41 @@ int main(void) {
 
     //Generate a blank image
     BitmapImage testImage;
-    if(bitmap_generate_image_24(&testImage, 0, 0, 255, 10, 10) != _SUCCESS_) {
+    if(bitmap_generate_image_24(&testImage, 0, 100, 255, 10, 10) != _SUCCESS_) {
         printf("Failed to generate\n");
         return -1;
     }
-    printf("Image generated\n");
 
-    if(bitmap_colour_pixel(&testImage, 1, 1, 255, 0, 0) != _SUCCESS_) {
+    /*
+    //Smiley face
+    if(bitmap_colour_pixel(&testImage, 3, 7, 255, 255, 0) != _SUCCESS_) {
         printf("Failed to colour pixel\n");
         return -4;
     }
-
-
-    /*
-    if(bitmap_greyscale(&testImage) != _SUCCESS_) {
-        printf("Failed to greyscale\n");
-        return -3;
+    if(bitmap_colour_pixel(&testImage, 7, 7, 255, 255, 0) != _SUCCESS_) {
+    printf("Failed to colour pixel\n");
+    return -4;
     }
-    */
-    if(bitmap_draw_line(&testImage, 0, 0, 5, 3, 255, 255, 255, 0) != _SUCCESS_) {
+
+    if(bitmap_draw_line(&testImage, 1, 4, 7, 3, 255, 255, 255, 1) != _SUCCESS_) {
         printf("Failed to draw line\n");
         return -3;
     }
+    */
+
+
+
+
+
+    /*
+    //Buggy
+    if(bitmap_draw_line(&testImage, 5, 5, 6, 10, 255, 0, 255, 1) != _SUCCESS_) {
+        printf("Failed to draw line\n");
+        return -3;
+    }
+    */
+
+    
 
     if(bitmap_reconstruct_image(&testImage, "./data/test.bmp") != _SUCCESS_) {
         printf("Failed to reconstruct image\n");

@@ -220,11 +220,9 @@ RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, ui
     } else {
 
         //Check for OOB
-        if(x > bitmapImage->bitmapMetadata.imageWidth || y > bitmapImage->bitmapMetadata.imageHeight) {
+        if(x >= bitmapImage->bitmapMetadata.imageWidth || y >= bitmapImage->bitmapMetadata.imageHeight) {
             return _SUCCESS_; //Dont fill but still return a success
         }
-
-
 
 
         uint32_t currentPixelData = 0; //Use 32 bit integer, depth is 24 bits but last 8 bits wont be appended to vector
@@ -240,7 +238,6 @@ RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, ui
         if(vector_set_index(&(bitmapImage->bitmapData), positionToInsert, &currentPixelData) == false) {
             return _INTERNAL_ERROR_;
         }
-
     }
 
     return _SUCCESS_;
@@ -269,7 +266,7 @@ RETURN_CODE bitmap_colour_pixel(BitmapImage *bitmapImage, size_t x, size_t y, ui
  */
 RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, size_t x2, size_t y2, uint8_t red, uint8_t green, uint8_t blue, int thickness) {
 
-    if(bitmapImage == NULL || thickness < 0) {
+    if(bitmapImage == NULL || thickness <= 0 || x1 > x2) {
         return _INVALID_ARG_PASS_;
 
     } else {
@@ -290,23 +287,20 @@ RETURN_CODE bitmap_draw_line(BitmapImage *bitmapImage, size_t x1, size_t y1, siz
 
         //printf("%ld, %ld, %d\n", x1 - thickness, x1 + thickness, (int)(x1 - thickness) < (int)(x1 + thickness));
         //Construct a line between two points, evaluate for x1 < x < x2. Then colour pixel(x, floor(f(x)))
-        bool overflowProtection = true;
-        for(size_t t = x1 - thickness; t < x1 + thickness || overflowProtection == true; t++) {
+        for(double t = x1Double - thickness; t < x1Double + thickness; t++) {
+
 
             double gradient = ((y1Double - y2Double)) / ((x1Double - x2Double)); //Gradient is the same after shift (note t cancels)
-            double intercept = (y1Double - t) - (gradient * (x1));
+            double intercept = (y1Double - t) - (gradient * (x1Double));
 
-            for(size_t x = x1; x < x2; x++) {
+            for(double x = x1Double; x <= x2Double; x++) {
+
 
                 //NOTE: bitmap_colour_pixel does not return an error if the pixel is out of range - this is on purpose so the code below works
                 if(bitmap_colour_pixel(bitmapImage, x, floor((x * gradient) + intercept), red, green, blue) != _SUCCESS_) { //Colour the specific pixel
 
                     return _INTERNAL_ERROR_;
                 }
-            }
-
-            if(t == 0) {
-                overflowProtection = false;
             }
         }
 
