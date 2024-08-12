@@ -3,6 +3,10 @@
 #define BITMAP_FILE_SIGNATURE 0x4D42
 #define BITS_PER_BYTE 8
 #define PAD_CONSTANT 4
+#define BYTES_PER_PIXEL_24 3
+#define BIT_24_DEPTH 24
+#define FILE_HEADER_SIZE 14
+#define BITMAP_HEADER_SIZE 40
 /*
 TODO: 
 - Draw a line accross an image
@@ -112,8 +116,74 @@ RETURN_CODE bitmap_enstantiate(char *bitmapPath, BitmapImage *bitmapImageOutput)
 }
 
 
+/**
+ * bitmap_generate_image_24
+ * ===============================================
+ * Brief: Generate a 24 bit depth image of a certian colour
+ * 
+ * Param: *outputImage - Pointer to uninitialised bitmap struct
+ *        red - red value of background
+ *        green - green value of background
+ *        blue - blue value of background
+ *        xRes - x resolution of image (pixels)
+ *        yRes - y resolution of image (pixels)
+ * 
+ * Return: bool - T/F depending on if addition was successful
+ * 
+ */
+RETURN_CODE bitmap_generate_image_24(BitmapImage *outputImage, uint8_t red, uint8_t green, uint8_t blue, size_t xRes, size_t yRes) {
+
+    if(outputImage == NULL || xRes == 0 || yRes == 0) {
+        return _INVALID_ARG_PASS_;
+    } else {
+
+        outputImage->bitmapImagePtr = NULL; //Does not point to a file
+        if(vector_initialise(&(outputImage->bitmapData), BYTES_PER_PIXEL_24) == false) { //Assume 24 bit depth for now
+            return _INTERNAL_ERROR_;
+        }
 
 
+        //Set image colour
+        for(size_t i = 0; i < xRes * yRes; i++) { //For pixel in image
+            
+            uint32_t currentPixelData = 0; //Use 32 bit integer, depth is 24 bits but last 8 bits wont be appended to vector
+            //WARNING: Assuming BGR format [B, G, R]
+            currentPixelData = blue;
+            currentPixelData <<= BITS_PER_BYTE;
+            currentPixelData += green;
+            currentPixelData <<= BITS_PER_BYTE;
+            currentPixelData += red;
+
+
+            if(vector_quick_append(&(outputImage->bitmapData), &currentPixelData, 1) == false) {
+                return _INTERNAL_ERROR_;
+            }
+        }
+
+
+        size_t paddingPerRow = (PAD_CONSTANT - (xRes * BYTES_PER_PIXEL_24 % PAD_CONSTANT)) % PAD_CONSTANT;
+        //Set metadata
+        outputImage->bitmapMetadata.bitsPerPixel = BIT_24_DEPTH; //24 bit depth
+        outputImage->bitmapMetadata.compressionType = 0;
+        outputImage->bitmapMetadata.headerSize = BITMAP_HEADER_SIZE;
+        outputImage->bitmapMetadata.imageFileSize = (xRes + paddingPerRow) * yRes * BYTES_PER_PIXEL_24;
+        outputImage->bitmapMetadata.imageHeight = yRes;
+        outputImage->bitmapMetadata.imageWidth = xRes;
+        outputImage->bitmapMetadata.importantColours = 0;
+        outputImage->bitmapMetadata.numberOfColours = 0;
+        outputImage->bitmapMetadata.numberOfPlanes = 0;
+        outputImage->bitmapMetadata.xRes = 0;
+        outputImage->bitmapMetadata.yRes = 0;
+
+        outputImage->bitmapHeader.fileSize = FILE_HEADER_SIZE + BITMAP_HEADER_SIZE + outputImage->bitmapMetadata.imageFileSize;
+        outputImage->bitmapHeader.fileType = BITMAP_FILE_SIGNATURE;
+        outputImage->bitmapHeader.res1 = 0;
+        outputImage->bitmapHeader.res2 = 0;
+        outputImage->bitmapHeader.dataOffset = FILE_HEADER_SIZE + BITMAP_HEADER_SIZE;
+    }
+
+    return _SUCCESS_;
+}
 
 
 
@@ -173,9 +243,9 @@ RETURN_CODE bitmap_greyscale(BitmapImage *bitmapImage) {
                 //Set greyscale
                 grey = (0.299 * red) + (0.587 * green) + (0.144 * blue);
                 uint32_t newPixel = grey;
-                newPixel <<= 8;
+                newPixel <<= BITS_PER_BYTE;
                 newPixel += grey;
-                newPixel <<= 8;
+                newPixel <<= BITS_PER_BYTE;
                 newPixel += grey;
 
                 //printf("Blue: %d, Green: %d, Red: %d, Grey: %d\n", blue, green, red, newPixel);
