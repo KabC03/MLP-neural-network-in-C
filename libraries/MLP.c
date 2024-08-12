@@ -343,12 +343,13 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
             return _INTERNAL_ERROR_;
         }
         
+        /*
         printf("Rows: %zu, Cols: %zu\n",inputToInputLayer.rows, inputToInputLayer.cols);
         if(matrix_2D_print(&inputToInputLayer) == false) {
             return _INTERNAL_ERROR_;
         }
         printf("\n");
-        
+        */
         
         if(MLP_normalise(&inputToInputLayer, BYTE_SIZE) == false) {
             return _INTERNAL_ERROR_;
@@ -365,9 +366,18 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
             }
 
             //preActivatedOutput = [weights]*[input] + [bias]; //STORE THIS
-            if(matrix_2D_multiply(&(currentLayer->preActivationOutput), &(currentLayer->weight), inputToLayer) == false) { //ISSUE HERE
+            if(matrix_2D_multiply(&(currentLayer->preActivationOutput), &(currentLayer->weight), inputToLayer) == false) {
                 return _INTERNAL_ERROR_;
             }
+            
+            printf("Preactivation: %zu\n",i);
+            if(matrix_2D_print(&(currentLayer->preActivationOutput)) == false) {
+                return _INTERNAL_ERROR_;
+            }
+            printf("\n");
+            
+
+
             if(matrix_2D_add(&(currentLayer->preActivationOutput), &(currentLayer->preActivationOutput), &(currentLayer->bias)) == false) {
                 return _INTERNAL_ERROR_;
             }
@@ -431,7 +441,57 @@ RETURN_CODE MLP_print_output(Network *network) {
 
 
 
+/**
+ * MLP_print_layers
+ * ===============================================
+ * Brief: Print all layers of a network
+ * 
+ * Param: *network - Network of interest
+ *        
+ * Return: bool - T/F depending on if initialisation was successful
+ * 
+ */
+RETURN_CODE MLP_print_layers(Network *network) {
 
+    if(network == NULL) {
+        return _INVALID_ARG_PASS_;
+
+    } else {
+
+
+        for(size_t i = 0; i < vector_get_length(&(network->networkLayers)) + 1; i++) {
+            NetworkLayer *currentLayer = (NetworkLayer*)vector_get_index(&(network->networkLayers), i);
+
+
+            printf("Layer: %zu\n", i);
+
+
+            printf("    bias:\n");
+            if(matrix_2D_print(&(currentLayer->bias)) == false) {
+                return _INTERNAL_ERROR_;
+            }
+
+            printf("    weight:\n");
+            if(matrix_2D_print(&(currentLayer->weight)) == false) {
+                return _INTERNAL_ERROR_;
+            }
+
+            printf("    pre-ac:\n");
+            if(matrix_2D_print(&(currentLayer->preActivationOutput)) == false) {
+                return _INTERNAL_ERROR_;
+            }
+
+            printf("    output:\n");
+            if(matrix_2D_print(&(currentLayer->output)) == false) {
+                return _INTERNAL_ERROR_;
+            }
+            printf("\n\n\n");
+        }
+
+    }
+
+    return _SUCCESS_;
+}
 
 
 

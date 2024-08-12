@@ -7,9 +7,9 @@
 #include <math.h>
 #include <string.h>
 #define FILE_BUFFER_SIZE 100
-#define NUM_LAYERS 3
+#define NUM_LAYERS 2
 #define BYTES_PER_PIXEL 3
-#define NEURONS_PER_LAYER {((testImage.bitmapMetadata.imageHeight * testImage.bitmapMetadata.imageWidth)), 2, 3, 3}
+#define NEURONS_PER_LAYER {((testImage.bitmapMetadata.imageHeight * testImage.bitmapMetadata.imageWidth)), 2, 2}
 //#define NEURONS_PER_LAYER {20, 100, 2, 2} /*NOTE: last 2 numbers MUST be the same to properly initilise the network*/
 
 #define TRAIN_FLAG "-t"
@@ -20,37 +20,17 @@
 int main(void) {
 
 
-    //srand(time(NULL)); //Use default seed of 1
+    srand(time(NULL)); //Use default seed of 1
 
 
     //Generate a blank image
 
     BitmapImage testImage;
-    if(bitmap_generate_image_24(&testImage, 0, 100, 255, 10, 10) != _SUCCESS_) {
+    if(bitmap_generate_image_24(&testImage, 0, 100, 255, 2, 2) != _SUCCESS_) {
         printf("Failed to generate\n");
         return -1;
     }
-    
 
-    
-    //Smiley face
-    if(bitmap_colour_pixel(&testImage, 3, 7, 255, 255, 0) != _SUCCESS_) {
-        printf("Failed to colour pixel\n");
-        return -4;
-    }
-    if(bitmap_colour_pixel(&testImage, 7, 7, 255, 255, 0) != _SUCCESS_) {
-    printf("Failed to colour pixel\n");
-    return -4;
-    }
-
-    if(bitmap_draw_line(&testImage, 1, 3, 7, 2, 255, 255, 255, 1) != _SUCCESS_) {
-        printf("Failed to draw line\n");
-        return -3;
-    }
-    if(bitmap_draw_line(&testImage, 5, 2, 7, 3, 255, 255, 255, 1) != _SUCCESS_) {
-        printf("Failed to draw line\n");
-        return -3;
-    }
     
 
 
@@ -80,6 +60,11 @@ int main(void) {
         return -1;
     }
 
+    
+    if(MLP_print_layers(&network) != _SUCCESS_) {
+        printf("Failed to print layers\n");
+        return -1;
+    }
 
     printf("Printing network output:\n");
     if(MLP_print_output(&network) != _SUCCESS_) {
