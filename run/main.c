@@ -9,7 +9,7 @@
 #define FILE_BUFFER_SIZE 100
 #define NUM_LAYERS 2
 #define BYTES_PER_PIXEL 3
-#define NEURONS_PER_LAYER {((testImage.bitmapMetadata.imageHeight * testImage.bitmapMetadata.imageWidth)), 2, 2}
+#define NEURONS_PER_LAYER {((testImage.bitmapMetadata.imageHeight * testImage.bitmapMetadata.imageWidth)), 3, 3}
 //#define NEURONS_PER_LAYER {20, 100, 2, 2} /*NOTE: last 2 numbers MUST be the same to properly initilise the network*/
 
 #define TRAIN_FLAG "-t"
@@ -22,28 +22,6 @@ int main(void) {
 
     srand(time(NULL)); //Use default seed of 1
 
-
-    Matrix test;
-    Matrix test2;
-
-    matrix_2D_initialise(&test, 3, 3, sizeof(float));
-    matrix_2D_initialise(&test2, 3, 3, sizeof(float));
-    float input[] = {2,0,0,0,1,0,0,0,1};
-    matrix_2D_set(&test, 3, 3, input, sizeof(float));
-    matrix_2D_set(&test2, 3, 3, input, sizeof(float));
-
-    matrix_2D_print(&test);
-    printf("\n\n");
-    matrix_2D_print(&test2);
-
-    Matrix test3;
-    matrix_2D_initialise(&test3, 3, 3, sizeof(float));
-
-    matrix_2D_subtract(&test3, &test, &test2, matrix_2D_subtract_float_component);
-    printf("\n\n");
-    matrix_2D_print(&test3);
-
-    return 0;
     //Generate a blank image
 
     BitmapImage testImage;
@@ -54,11 +32,12 @@ int main(void) {
 
     
 
-
+    
     if(bitmap_greyscale(&testImage) != _SUCCESS_) {
         printf("Failed to greyscale image\n");
         return -1;
     }
+    
 
     if(bitmap_reconstruct_image(&testImage, "./data/test.bmp") != _SUCCESS_) {
         printf("Failed to reconstruct image\n");

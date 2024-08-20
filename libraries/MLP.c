@@ -41,7 +41,7 @@ bool MLP_randomise(Matrix *const matrix, float range, float min) {
 
 
         for(size_t i = 0; i < (matrix->cols * matrix->rows); i++) {
-            matrix->data[(matrix->dataSize) * i] = (min + (range * (float)rand())/RAND_MAX);
+            *((float*)(&(matrix->data[(matrix->dataSize) * i]))) = (min + (range * (float)rand())/RAND_MAX);
         }
 
     }
@@ -139,7 +139,7 @@ bool MLP_ReLu(Matrix *const arg1, Matrix *const result) {
         for(size_t i = 0; i < (arg1->cols * arg1->rows); i++) {
 
             if(*(float*)(&((arg1->data)[(result->dataSize) * i])) < 0) {
-                *(float*)(&((result->data)[(result->dataSize) * i])) = 0;
+                *((float*)(&((result->data)[(result->dataSize) * i]))) = 0;
             } else {
                 *(float*)(&((result->data)[(result->dataSize) * i])) = *(float*)(&((arg1->data)[(arg1->dataSize) * i]));
             }
@@ -365,7 +365,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
 
 
         Matrix *inputToLayer = &inputToInputLayer;
-        size_t numberOfLayers = vector_get_length(&(network->networkLayers));
+        size_t numberOfLayers = vector_get_length(&(network->networkLayers)) + 1;
         for(size_t i = 0; i < numberOfLayers; i++) {
 
             NetworkLayer *currentLayer = (NetworkLayer*)vector_get_index(&(network->networkLayers), i);
@@ -472,7 +472,7 @@ RETURN_CODE MLP_print_layers(Network *network) {
             NetworkLayer *currentLayer = (NetworkLayer*)vector_get_index(&(network->networkLayers), i);
 
 
-            printf("Layer: %zu\n", i);
+            printf("Layer: %zu ||| Neurons: %zu\n", i, vector_get_size(&(network->networkLayers)) + 1);
 
 
             printf("    bias:\n");
