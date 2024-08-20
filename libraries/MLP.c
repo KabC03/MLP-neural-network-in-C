@@ -374,7 +374,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
             }
 
             //preActivatedOutput = [weights]*[input] + [bias]; //STORE THIS
-            if(matrix_2D_multiply(&(currentLayer->preActivationOutput), &(currentLayer->weight), inputToLayer) == false) {
+            if(matrix_2D_multiply(&(currentLayer->preActivationOutput), &(currentLayer->weight), inputToLayer, matrix_2D_multiply_float_component) == false) {
                 return _INTERNAL_ERROR_;
             }
             

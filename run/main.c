@@ -23,6 +23,18 @@ int main(void) {
     srand(time(NULL)); //Use default seed of 1
 
 
+    Matrix test;
+    Matrix test2;
+
+    matrix_2D_initialise(&test, 3, 3, sizeof(float));
+    matrix_2D_initialise(&test2, 3, 3, sizeof(float));
+    float input[] = {1,0,0,0,1,0,0,0,1};
+    matrix_2D_set(&test, 3, 3, input, sizeof(float));
+    matrix_2D_set(&test, 3, 3, input, sizeof(float));
+
+    matrix_2D_print(&test);
+
+    return 0;
     //Generate a blank image
 
     BitmapImage testImage;
@@ -60,7 +72,7 @@ int main(void) {
         return -1;
     }
 
-    
+
     if(MLP_print_layers(&network) != _SUCCESS_) {
         printf("Failed to print layers\n");
         return -1;
