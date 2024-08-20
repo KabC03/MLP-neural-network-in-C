@@ -28,11 +28,20 @@ int main(void) {
 
     matrix_2D_initialise(&test, 3, 3, sizeof(float));
     matrix_2D_initialise(&test2, 3, 3, sizeof(float));
-    float input[] = {1,0,0,0,1,0,0,0,1};
+    float input[] = {2,0,0,0,1,0,0,0,1};
     matrix_2D_set(&test, 3, 3, input, sizeof(float));
-    matrix_2D_set(&test, 3, 3, input, sizeof(float));
+    matrix_2D_set(&test2, 3, 3, input, sizeof(float));
 
     matrix_2D_print(&test);
+    printf("\n\n");
+    matrix_2D_print(&test2);
+
+    Matrix test3;
+    matrix_2D_initialise(&test3, 3, 3, sizeof(float));
+
+    matrix_2D_multiply(&test3, &test, &test2, matrix_2D_multiply_float_component);
+    printf("\n\n");
+    matrix_2D_print(&test3);
 
     return 0;
     //Generate a blank image
