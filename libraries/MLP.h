@@ -17,7 +17,7 @@
 typedef struct Network {
 
     Vector networkLayers; //Layer data (metadata) - note network output is stored in the last layers output matrix
-
+    float networkError;   //Error of network
 
 } Network;
 
@@ -38,7 +38,7 @@ RETURN_CODE MLP_initialise_network(Network *network, size_t numberOfLayers, size
 RETURN_CODE MLP_evaluate_input(Network *network, Vector *input);
 RETURN_CODE MLP_print_output(Network *network);
 RETURN_CODE MLP_print_layers(Network *network);
-
+RETURN_CODE MLP_backpropagate(Network *network, Matrix *expectedOutput);
 
 #endif // MLP_H
 
