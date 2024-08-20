@@ -39,7 +39,7 @@ int main(void) {
     Matrix test3;
     matrix_2D_initialise(&test3, 3, 3, sizeof(float));
 
-    matrix_2D_multiply(&test3, &test, &test2, matrix_2D_multiply_float_component);
+    matrix_2D_subtract(&test3, &test, &test2, matrix_2D_subtract_float_component);
     printf("\n\n");
     matrix_2D_print(&test3);
 

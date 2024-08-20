@@ -387,7 +387,7 @@ RETURN_CODE MLP_evaluate_input(Network *network, Vector *input) {
             */
 
 
-            if(matrix_2D_add(&(currentLayer->preActivationOutput), &(currentLayer->preActivationOutput), &(currentLayer->bias)) == false) {
+            if(matrix_2D_add(&(currentLayer->preActivationOutput), &(currentLayer->preActivationOutput), &(currentLayer->bias), matrix_2D_add_float_component) == false) {
                 return _INTERNAL_ERROR_;
             }
 
