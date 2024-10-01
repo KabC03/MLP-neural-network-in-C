@@ -445,7 +445,7 @@ RETURN_CODE MLP_backpropagate(Network *network, Matrix *expectedOutput) {
 
     } else {
 
-        Matrix *outputLayer = vector_get_index(&(network->networkLayers), vector_get_length(&network->networkLayers));
+        Matrix *outputLayer = (Matrix*)vector_get_index(&(network->networkLayers), vector_get_length(&network->networkLayers));
         if(outputLayer == NULL) {
             return _INTERNAL_ERROR_;
         }
