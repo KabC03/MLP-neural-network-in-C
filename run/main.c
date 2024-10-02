@@ -25,7 +25,7 @@ int main(void) {
     //Generate a blank image
 
     BitmapImage testImage;
-    if(bitmap_generate_image_24(&testImage, 100, 100, 255, 2, 2) != _SUCCESS_) {
+    if(bitmap_generate_image_24(&testImage, 100, 100, 255, 5, 5) != _SUCCESS_) {
         printf("Failed to generate\n");
         return -1;
     }
