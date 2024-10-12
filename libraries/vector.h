@@ -1,50 +1,42 @@
-//Generic vectors in C - uses uint8_t to index with bytes directly
-
-#ifndef VECTOR_H
+//23 September 2024
+#ifndef VECTOR_H 
 #define VECTOR_H
 
 #include <stdlib.h>
-#include <stdio.h>
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdint.h>
 
 
 
-#define Vector(type, name)\
-    Vector name;\
-    vector_initialise(&name, sizeof(type));\
-
-
-
-
 typedef struct Vector {
 
-    size_t size;         //Memory of vector (num of bytes)
-
-    size_t top;          //Top index of array (index)
-
-    uint8_t* data;       //Data array pointer
-    size_t elementSize;  //Size of individual element in array
+    uint8_t *data; //Dont use a FLM here since it means entire structure needs to be reallocated upon reisze
+    size_t top;
+    size_t capacity;
+    uint8_t dataSize;
 
 } Vector;
 
 
-bool vector_initialise(Vector *const vector, size_t elementSize);
-void vector_print(const Vector *const vector);
-size_t vector_get_size(const Vector *const vector);
-size_t vector_get_length(const Vector *const vector);
+void vector_print_size_t(void *ptr);
+void vector_print_integer(void *ptr);
+void vector_print_uint8_t(void *ptr);
+void vector_disp(Vector *vector, void print_element(void *element));
+bool vector_init(Vector *vector, uint8_t dataSize, size_t numel);
+void vector_destroy(Vector *vector);
+bool vector_resize(Vector *vector, size_t numel );
+void *vector_append(Vector *vector, void *data, size_t numel);
+void *vector_access_index(Vector *vector, size_t index);
+void *vector_set_index(Vector *vector, void *data, size_t index);
+void vector_fill(Vector *vector, void *data);
 
-
-bool vector_set_index(Vector *const vector, size_t index, const void *const data);
-const uint8_t* vector_get_index(Vector *const vector, size_t index);
-bool vector_insert_index(Vector *const vector, size_t index, const void *const data);
-bool vector_delete_index(Vector *const vector, size_t index);
-bool vector_resize(Vector *const vector, int offsetSize);
-bool vector_destroy(Vector *const vector);
-bool vector_quick_append(Vector *const vector, const void *const data, size_t amountOfData);
-
-#endif // VECTOR_H
+#endif 
 
 
 
+      
+      
+      
+      

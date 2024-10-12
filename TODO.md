@@ -8,3 +8,5 @@
 - Train: Compare the actual and expected result, backpropagate
 - Run: Display the output
 
+- Interactive fractal zoom python
+- Python game engine
