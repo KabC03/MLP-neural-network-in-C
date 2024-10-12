@@ -1,13 +1,11 @@
 #Run everything
-#25 Jul
+#12 Oct
 
+clear
 mkdir -p output
-clear && clang ./libraries/*.c ./run/main.c -Wall -Werror -fsanitize=address -o ./output/exec && ./output/exec
+clang ./libraries/*.c ./run/*.c -Werror -Wall -fsanitize=address -o ./output/exec
 
-
-
-
-
+./output/exec
 
 
 
