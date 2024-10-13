@@ -123,14 +123,21 @@ cleanup:
  *
  * @param :: *mlp :: Network of interest 
  * @param :: *input :: Input vector of data 
+ * @param :: *output :: Output vector 
  * @param :: activate :: Activation function 
  *  
  * @return :: void 
  */
-void MLP_run(Matrix *mlp, Vector *input, void activate(void *element)) {
+void MLP_run(MLP *mlp, Vector *input, Vector *output, void activate(void *element)) {
 
+    //Copy input into first layer of MLP input
+
+
+    //Use for loop to calculate output of each layer and place it into input of next layer
+
+
+    //Return MLP output
     
-
     return;
 }
 
