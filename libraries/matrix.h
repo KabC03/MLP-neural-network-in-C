@@ -39,6 +39,9 @@ void matrix_activate(Matrix *matrix, void activate(void *element));
 void matrix_transpose(Matrix *dest, Matrix *src);
 
 
+void matrix_randomise_float(void *element, void *min, void *max);
+void matrix_randomise(Matrix *matrix, void *min, void *max, void randomise(void *element, void *min, void *max));
+
 #endif 
 
 

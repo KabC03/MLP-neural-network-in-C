@@ -12,7 +12,7 @@
 #define CONST_REALLOC_EXPANSION 2
 #define MACRO_MEMCPY(dest, src, n) memcpy(dest, src, n)
 
-    
+
 /**
  * @brief :: Print a float element of a matrix 
  *
@@ -245,6 +245,50 @@ void matrix_transpose(Matrix *dest, Matrix *src) {
 
 
 
+
+
+/**
+ * @brief :: Randomise a float element within a matrix 
+ *
+ * @param :: *element :: Element to randomise
+ * @param :: *min :: Min value
+ * @param :: *max :: Max value
+ * 
+ * @return :: void 
+ */
+void matrix_randomise_float(void *element, void *min, void *max) {
+
+    float floatMin = *(float*)min;
+    float floatMax = *(float*)max;
+
+    float number = floatMin + (floatMax - floatMin) * ((float)rand() / (float)RAND_MAX);
+
+    *(float*)element = number;
+
+    return;
+}
+
+
+/**
+ * @brief :: Fill a matrix with random values
+ *
+ * @param :: *matrix :: Matrix to randomise
+ * @param :: *min :: Min value
+ * @param :: *max :: Max value
+ * @param :: *randomise :: Randomise function for individual element 
+ * 
+ * @return :: void 
+ */
+void matrix_randomise(Matrix *matrix, void *min, void *max, void randomise(void *element, void *min, void *max)) {
+
+    //Assume dest is already the correct dimensions
+    for(size_t i = 0; i < matrix->rows * matrix->cols; i++) {
+        void *element = matrix->data.data + i * matrix->data.dataSize; 
+        randomise(element, min, max);
+    }
+
+    return;
+}
 
 
 

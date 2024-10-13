@@ -21,13 +21,12 @@ typedef struct MLP {
 } MLP;
 
 
-bool MLP_init(MLP *mlp, Vector *layerNumbers);
+void MLP_disp(MLP *mlp);
+bool MLP_init(MLP *mlp, Vector *layerNumbers); //This should also randomise matricies at some point automatically
 /*
 TODO:
-- Print a network
-- Randomise a networks weights and biases
 - Compute the output of a network from an input
-
+- Distroy a network
 */
 
 
